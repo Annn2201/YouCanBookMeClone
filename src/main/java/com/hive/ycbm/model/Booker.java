@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,7 +24,7 @@ public class Booker {
     private String lastName;
     private String email;
     private Date startTime;
-    @OneToOne
+    @OneToMany
     @JoinColumn(name = "event_id")
-    private Event event;
+    private List<Event> events;
 }

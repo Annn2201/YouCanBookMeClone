@@ -28,6 +28,9 @@ public class Event {
     @JoinColumn(name = "calendar_id")
     private Calendar calendar;
 
+    @ManyToOne
+    private Booker booker;
+
     @ManyToMany(mappedBy = "events")
     private Collection<User> users;
 }

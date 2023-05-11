@@ -1,6 +1,6 @@
 package com.hive.ycbm.services;
 import com.hive.ycbm.dto.UserDto;
-import com.hive.ycbm.model.User;
+import com.hive.ycbm.models.User;
 public interface UserService {
     void save(User user);
     void updateById(Long id);

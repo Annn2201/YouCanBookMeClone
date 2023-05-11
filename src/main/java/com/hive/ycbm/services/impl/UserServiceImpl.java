@@ -1,10 +1,10 @@
-package com.hive.ycbm.services.Impl;
+package com.hive.ycbm.services.impl;
 import com.hive.ycbm.repositories.RoleRepository;
 import com.hive.ycbm.repositories.UserRepository;
 import com.hive.ycbm.services.UserService;
 import com.hive.ycbm.dto.UserDto;
-import com.hive.ycbm.model.Role;
-import com.hive.ycbm.model.User;
+import com.hive.ycbm.models.Role;
+import com.hive.ycbm.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 @Service

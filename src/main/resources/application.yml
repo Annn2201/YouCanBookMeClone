@@ -1,5 +1,5 @@
 server:
-  post: 8080
+  port: 8080
 
 spring:
   main:
@@ -7,15 +7,30 @@ spring:
   application:
     name: INE4
   datasource:
-    url: jdbc:mariadb://localhost:3307/ycbm
+    url: jdbc:mariadb://192.168.1.143:3306/ycbm
     username: root
-    password: 123456
+    password: 1e3q2wadS
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
-    database-platform: org.hibernate.dialect.MariaDB8Dialect
+    database-platform: org.hibernate.dialect.MariaDBDialect
     hibernate:
       ddl-auto: none
+    generate-ddl: false
     show-sql: true
   thymeleaf:
     cache: false
     enabled: true
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    username: ycbmclone@gmail.com
+    password: lqvtxkewdaiaivqi
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    protocol: smtp
+    test-connection: false

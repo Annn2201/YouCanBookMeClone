@@ -1,7 +1,7 @@
 package com.hive.ycbm.controllers;
 import com.hive.ycbm.services.UserService;
 import com.hive.ycbm.dto.UserDto;
-import com.hive.ycbm.model.User;
+import com.hive.ycbm.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

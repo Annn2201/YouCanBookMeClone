@@ -1,4 +1,4 @@
-package com.hive.ycbm.model;
+package com.hive.ycbm.models;
 import jakarta.persistence.*;
 import lombok.*;
 

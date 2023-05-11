@@ -1,5 +1,6 @@
 package com.hive.ycbm.repositories;
-import com.hive.ycbm.model.User;
+
+import com.hive.ycbm.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

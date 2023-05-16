@@ -11,25 +11,9 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     private UserService userService;
-    @GetMapping("/login")
-    public String showLoginPage(Model model) {
-        User user = new User();
-        model.addAttribute("user", user);
+    @RequestMapping("/login")
+    public String showLoginPage() {
         return "login";
-    }
-    @PostMapping("/login")
-    public String login(@ModelAttribute("user") User user,
-                        BindingResult result,
-                        Model model) {
-        UserDto userLogined = userService.findByMainEmail(user.getMainEmail());
-        if (userLogined.getMainEmail() == null) {
-            result.rejectValue("mainEmail", null, "Invalid user");
-        }
-        if (result.hasErrors()) {
-            return "/login";
-        }
-        model.addAttribute("user", userLogined);
-        return "user";
     }
     @GetMapping("/register")
     public String showRegisterPage(Model model) {
@@ -54,8 +38,10 @@ public class UserController {
         return "redirect:/register?success";
     }
     @GetMapping("/user")
-    public String showUpdatePage(
-            Model model) {
+    //TODO
+    public String showUpdatePage(Model model) {
+        User user = new User();
+        model.addAttribute("user", user);
         return "user";
     }
 }

@@ -6,15 +6,26 @@ import com.hive.ycbm.dto.UserDto;
 import com.hive.ycbm.models.Role;
 import com.hive.ycbm.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.Arrays;
+import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Override
     public void save(User user) {
+        Role role = roleRepository.findByName("ROLE_ADMIN");
+        if (role == null) {
+            role = roleRepository.save(new Role("ROLE_ADMIN"));
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(List.of(role));
         userRepository.save(user);
     }
     @Override
@@ -54,5 +65,4 @@ public class UserServiceImpl implements UserService {
                 .organization(user.getOrganization())
                 .build();
     }
-
 }

@@ -18,4 +18,8 @@ public class Role {
     private String name;
     @ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
     private List<User> users = new ArrayList<>();
+
+    public Role(String name) {
+        this.name = name;
+    }
 }

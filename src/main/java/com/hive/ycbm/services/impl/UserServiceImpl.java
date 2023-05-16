@@ -6,9 +6,10 @@ import com.hive.ycbm.dto.UserDto;
 import com.hive.ycbm.models.Role;
 import com.hive.ycbm.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.Arrays;
 import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
@@ -64,5 +65,25 @@ public class UserServiceImpl implements UserService {
                 .phone(user.getPhone())
                 .organization(user.getOrganization())
                 .build();
+    }
+    @Override
+    public void update(UserDto userDto) {
+        User updateUser = userRepository.findByMainEmail(userDto.getMainEmail()).orElse(new User());
+        updateUser.setPhone(userDto.getPhone());
+        updateUser.setOrganization(userDto.getOrganization());
+        userRepository.save(updateUser);
+    }
+
+    @Override
+    public UserDto loadCurrentUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = "";
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            throw new RuntimeException("Something wrong!!");
+        }
+        UserDto currentUser = findByMainEmail(username);
+        return currentUser;
     }
 }

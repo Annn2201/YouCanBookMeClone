@@ -7,4 +7,6 @@ public interface UserService {
     void delete(User user);
     UserDto findById(Long id);
     UserDto findByMainEmail(String email);
+    void update(UserDto userDto);
+    UserDto loadCurrentUser();
 }

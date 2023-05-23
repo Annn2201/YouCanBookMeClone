@@ -9,4 +9,9 @@ public interface UserService {
     UserDto findByMainEmail(String email);
     void update(UserDto userDto);
     UserDto loadCurrentUser();
+
+    void changePassword(String newPassword);
+
+    boolean checkIfValidOldPassword(String password);
+    String loadCurrentMailEmail();
 }

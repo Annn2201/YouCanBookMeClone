@@ -22,26 +22,20 @@
     CMS</a>
   <ul class="navbar-nav ml-auto">
     <li class="nav-item">
-      <a class="nav-link" style="color: yellow">
-        <em class="fa fa-user-circle-o"></em>
-      </a>
-    </li>
-    <li class="nav-item">
       <a class="nav-link"  th:href="@{/logout}">
         <em class="fa fa-user-times"></em>
         Logout
       </a>
     </li>
   </ul>
-  </div>
 </nav>
 
   <div class="container">
     <div class="row">
       <div class="col-lg-3">
         <ul>
-          <li id="accountOverview"><a href="#">Account Overview</a></li>
-          <li id="updateAccountEmail"><a href="#">Update Account Email</a></li>
+          <li><a id="accountOverview" th:href="@{/user}">Account Overview</a></li>
+          <li><a id="updatePassword" th:href="@{/update-password}">Update Password</a></li>
         </ul>
       </div>
     <div class="col-lg-9 personal-info">
@@ -55,68 +49,47 @@
             th:object="${currentUser}"
             method="post" name="frm-member">
           <div>
-              <input class="form-control" type="hidden" th:field="${currentUser.userId}">
+              <input class="form-control" type="hidden" th:field="${currentUser.userId} ">
           </div>
           <div class="form-group">
-            <label class="col-md-3 control-label">First name:</label>
+            <label class="control-label">First name:</label>
             <div class="col-md-100">
-              <input class="form-control" type="text" th:field="${currentUser.firstName}">
+              <input class="form-control" type="text" th:field="${currentUser.firstName}" readonly>
             </div>
           </div>
           <div class="form-group">
-            <label class="col-lg-3 control-label">Last name:</label>
+            <label class="control-label">Last name:</label>
             <div class="col-lg-100">
-              <input class="form-control" type="text" value="" th:field="${currentUser.lastName}">
+              <input class="form-control" type="text" value="" th:field="${currentUser.lastName}" readonly>
             </div>
           </div>
           <div class="form-group">
-            <label class="col-lg-3 control-label">Email:</label>
+            <label class="control-label">Email:</label>
             <div class="col-lg-100">
               <input class="form-control" type="email" value="" th:field="${currentUser.mainEmail}">
             </div>
           </div>
           <div class="form-group">
-            <label class="col-lg-3 control-label">Phone</label>
+            <label class="control-label">Phone</label>
             <div class="col-lg-100">
               <input class="form-control" type="text" value="" th:field="${currentUser.phone}">
             </div>
           </div>
           <div class="form-group">
-            <label class="col-lg-3 control-label">Organization</label>
+            <label class="control-label">Organization</label>
             <div class="col-lg-100">
               <input class="form-control" type="text" value="" th:field="${currentUser.organization}">
             </div>
           </div>
-        <button type="submit" class="btn btn-primary" name="update">
+        <button type="submit" class="btn btn-success" name="update">
           Update
         </button>
-        <button type="submit" class="btn btn-default" onclick="" name="reset">
+        <button type="reset" class="btn btn-default" onclick="" name="reset">
           Reset
         </button>
       </form>
     </div>
   </div>
 </div>
-<script>
-<!--  todo-->
-  $(document).ready(function () {
-    $("#accountOverview").click(function () {
-      $.get({
-        url:"user",
-        success: function (response) {
-          $(".container").html(response);
-        }
-      });
-    });
-    $("#updateAccountEmail").click(function () {
-      $.get({
-        url: "updateEmail",
-        success: function (response) {
-          $(".container").html(response);
-        }
-      });
-    });
-  })
-</script>
 </body>
 </html>

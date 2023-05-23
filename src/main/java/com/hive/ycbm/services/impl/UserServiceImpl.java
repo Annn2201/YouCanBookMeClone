@@ -64,6 +64,7 @@ public class UserServiceImpl implements UserService {
                 .mainEmail(user.getMainEmail())
                 .phone(user.getPhone())
                 .organization(user.getOrganization())
+                .password(user.getPassword())
                 .build();
     }
     @Override
@@ -76,14 +77,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto loadCurrentUser() {
+        return findByMainEmail(loadCurrentMailEmail());
+    }
+    @Override
+    public String loadCurrentMailEmail() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = "";
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
-        } else {
-            throw new RuntimeException("Something wrong!!");
+        if (!(principal instanceof UserDetails)){
+            return null;
         }
-        UserDto currentUser = findByMainEmail(username);
-        return currentUser;
+        return ((UserDetails)principal).getUsername();
+    }
+
+    @Override
+    public boolean checkIfValidOldPassword(String password) {
+        if (!passwordEncoder.matches(password, loadCurrentUser().getPassword())) {
+            return false;
+        }
+        return true;
+    }
+    @Override
+    public void changePassword(String newPassword) {
+        User userWannaChangePassword = userRepository.findByMainEmail(loadCurrentMailEmail()).orElse(null);
+        userWannaChangePassword.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(userWannaChangePassword);
     }
 }

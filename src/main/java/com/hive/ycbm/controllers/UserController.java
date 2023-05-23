@@ -57,4 +57,26 @@ public class UserController {
         userService.update(userDto);
         return "redirect:/user?success";
     }
+
+    @GetMapping("/update-password")
+    public String showUpdataPasswordPage(@ModelAttribute("currentUser") UserDto userDto) {
+        return "updatePassword";
+    }
+
+    @PostMapping("/update-password")
+    public String updatePassword(
+                                 @RequestParam(name = "password", required = false) String password,
+                                 @RequestParam(name = "newPassword", required = false) String newPassword,
+                                 @RequestParam(name = "confirmNewPassword", required = false) String confirmNewPassword) {
+        if (!newPassword.equals(confirmNewPassword)) {
+            // Xử lý lỗi - Mật khẩu mới và xác nhận mật khẩu mới không khớp
+            return "error";
+        }
+        if (!userService.checkIfValidOldPassword(password)) {
+            return "redirect:/update-password?error";
+        }
+        userService.changePassword(newPassword);
+        return "redirect:/update-password?success";
+    }
+
 }

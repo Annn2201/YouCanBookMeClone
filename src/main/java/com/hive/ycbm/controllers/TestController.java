@@ -31,7 +31,7 @@ public class TestController {
     public String triggerMail(@ModelAttribute("booker") BookerDto bookerDto,
                               Model model)
             throws MessagingException {
-        UserDto userDto = new UserDto(null, "Banana", "123", "thichthinhich83@gmail.com", null, null);
+        UserDto userDto = new UserDto(null, "Banana", "123", "thichthinhich83@gmail.com", null, null, "1");
         EventDto eventDto = new EventDto(10101L, Date.valueOf(LocalDate.now()), Duration.ofHours(1));
         model.addAttribute("booker", bookerDto);
         mailService.sendMail(bookerDto, userDto, eventDto);

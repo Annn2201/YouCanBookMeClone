@@ -20,6 +20,7 @@ public class Booker {
     private Long bookerId;
     private String firstName;
     private String lastName;
+    @Column(unique = true)
     private String email;
     private Date startTime;
     @OneToMany

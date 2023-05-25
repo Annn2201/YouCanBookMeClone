@@ -1,18 +1,18 @@
 package com.hive.ycbm.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.time.Duration;
 import java.util.Collection;
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "event")
 public class Event {
@@ -20,13 +20,19 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "event_id")
     private Long eventId;
-    private Date start;
+    private String eventTitle;
+    private LocalDateTime end;
+    private LocalDateTime start;
     private Duration duration;
     @ManyToOne
     @JoinColumn(name = "calendar_id")
     private Calendar calendar;
     @ManyToOne
+    @JoinColumn(name = "booker_id")
     private Booker booker;
     @ManyToMany(mappedBy = "events")
     private Collection<User> users;
+
+
+
 }

@@ -1,15 +1,27 @@
 package com.hive.ycbm.dto;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.time.Duration;
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EventDto {
+public class EventDto implements Serializable {
     private Long eventId;
-    private Date start;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime end;
+    private String eventTitle;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime start;
     private Duration duration;
+    private BookerDto booker;
+
+
 }

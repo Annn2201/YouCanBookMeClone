@@ -24,18 +24,17 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 @Controller
-@RequestMapping("/")
     public class EventController {
         @Autowired
         private EventService eventService;
         @Autowired
         private BookerService bookerService;
 
-    @GetMapping("/")
+    @GetMapping("/booking-page")
     public String showCreateForm() {
         return "booking-page";
     }
-    @PostMapping("/create")
+    @PostMapping("/create-event")
     public String createEvent(EventDto eventDto,
                               Model model) {
         model.addAttribute("event", eventDto);
@@ -47,7 +46,7 @@ import java.util.Locale;
         model.addAttribute("event", eventDto);
         return "confirm-booking";
     }
-    @PostMapping("/confirm/save")
+    @PostMapping("/confirm")
     public String confirmEvent(@ModelAttribute("event") EventDto eventDto) {
         bookerService.createBooker(eventDto);
         return "redirect:/confirm?success";

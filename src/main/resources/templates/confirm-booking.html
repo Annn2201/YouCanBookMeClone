@@ -26,13 +26,13 @@
                         </svg>
                         <div th:if="${param.success}">
                             <div class="alert alert-info">
-                                Create success!!
+                                Create Success!!
                             </div>
                         </div>
                         <form class="mb-4 mt-md-4"
                               method="post"
                               role="form"
-                              th:action="@{/confirm/save}"
+                              th:action="@{/confirm}"
                               th:object="${event}"
                         >
                             <h1 class="mb-4 ">Enter Your Personal Information</h1>

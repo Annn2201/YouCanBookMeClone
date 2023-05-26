@@ -1,7 +1,6 @@
 package com.hive.ycbm.services.impl;
 
 import com.hive.ycbm.services.MailService;
-import com.hive.ycbm.dto.BookerDto;
 import com.hive.ycbm.dto.EventDto;
 import com.hive.ycbm.dto.UserDto;
 import jakarta.mail.MessagingException;
@@ -20,19 +19,18 @@ public class MailServiceImpl implements MailService {
     private final SpringTemplateEngine templateEngine;
 
     @Override
-    public void sendMail(BookerDto bookerDto, UserDto userDto, EventDto eventDto) throws MessagingException {
+    public void sendMail(UserDto userDto, EventDto eventDto) throws MessagingException {
         Context context = new Context();
-        context.setVariable("firstName", bookerDto.getFirstName());
-        context.setVariable("lastName", bookerDto.getLastName());
-        context.setVariable("email", bookerDto.getEmail());
-        context.setVariable("user", userDto.getFirstName());
-        context.setVariable("ref", eventDto.getEventId());
-        context.setVariable("date", eventDto.getStart());
-        context.setVariable("duration", eventDto.getDuration());
+        context.setVariable("firstName", eventDto.getBooker().getFirstName());
+        context.setVariable("lastName", eventDto.getBooker().getLastName());
+        context.setVariable("email", eventDto.getBooker().getEmail());
+        context.setVariable("title", eventDto.getEventTitle());
+        context.setVariable("start", eventDto.getStart());
+        context.setVariable("end", eventDto.getEnd());
         String mailBooker = templateEngine.process("mail-booker.html", context);
-        createMail(bookerDto.getEmail(), "Your meeting with " + userDto.getFirstName(), mailBooker);
+        createMail(eventDto.getBooker().getEmail(), "Your meeting with " + userDto.getFirstName(), mailBooker);
         String mailUser = templateEngine.process("mail-user.html", context);
-        createMail(userDto.getMainEmail(), "New meeting scheduled with " + bookerDto.getFirstName(), mailUser);
+        createMail(userDto.getMainEmail(), "New meeting scheduled with " + eventDto.getBooker().getFirstName(), mailUser);
     }
 
     public void createMail(String to, String subject, String html) throws MessagingException {

@@ -1,12 +1,9 @@
 package com.hive.ycbm.services.impl;
 
-import com.hive.ycbm.dto.UserDto;
 import com.hive.ycbm.models.User;
 import com.hive.ycbm.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

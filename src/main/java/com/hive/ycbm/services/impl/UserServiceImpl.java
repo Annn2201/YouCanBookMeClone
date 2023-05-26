@@ -1,4 +1,5 @@
 package com.hive.ycbm.services.impl;
+
 import com.hive.ycbm.repositories.RoleRepository;
 import com.hive.ycbm.repositories.UserRepository;
 import com.hive.ycbm.services.UserService;
@@ -10,7 +11,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -19,6 +22,7 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Override
     public void save(User user) {
         Role role = roleRepository.findByName("ROLE_ADMIN");
@@ -29,6 +33,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(List.of(role));
         userRepository.save(user);
     }
+
     @Override
     public void updateById(Long id) {
         User userUpdate = userRepository.findById(id).orElse(null);
@@ -38,10 +43,12 @@ public class UserServiceImpl implements UserService {
         userUpdate.setOrganization(userUpdate.getOrganization());
         userRepository.save(userUpdate);
     }
+
     @Override
     public void delete(User user) {
         userRepository.deleteById(user.getUserId());
     }
+
     @Override
     public UserDto findById(Long id) {
         User user = userRepository.findById(id).orElse(new User());
@@ -54,8 +61,9 @@ public class UserServiceImpl implements UserService {
                 .organization(user.getOrganization())
                 .build();
     }
+
     @Override
-    public UserDto findByMainEmail(String email){
+    public UserDto findByMainEmail(String email) {
         User user = userRepository.findByMainEmail(email).orElse(new User());
         return UserDto.builder()
                 .userId(user.getUserId())
@@ -67,6 +75,7 @@ public class UserServiceImpl implements UserService {
                 .password(user.getPassword())
                 .build();
     }
+
     @Override
     public void update(UserDto userDto) {
         User updateUser = userRepository.findByMainEmail(userDto.getMainEmail()).orElse(new User());
@@ -79,13 +88,14 @@ public class UserServiceImpl implements UserService {
     public UserDto loadCurrentUser() {
         return findByMainEmail(loadCurrentMailEmail());
     }
+
     @Override
     public String loadCurrentMailEmail() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!(principal instanceof UserDetails)){
+        if (!(principal instanceof UserDetails)) {
             return null;
         }
-        return ((UserDetails)principal).getUsername();
+        return ((UserDetails) principal).getUsername();
     }
 
     @Override
@@ -95,6 +105,7 @@ public class UserServiceImpl implements UserService {
         }
         return true;
     }
+
     @Override
     public void changePassword(String newPassword) {
         User userWannaChangePassword = userRepository.findByMainEmail(loadCurrentMailEmail()).orElse(null);

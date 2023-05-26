@@ -1,10 +1,9 @@
 package com.hive.ycbm.dto;
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.time.Duration;
 import java.time.LocalDateTime;
 

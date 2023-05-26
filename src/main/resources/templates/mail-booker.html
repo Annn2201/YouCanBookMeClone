@@ -25,7 +25,7 @@
                         <div class="mb-3">
                             <h3 class="fw-bold mb-3 ">YouCanBookMe</h3>
                             <p class="mb-3 " th:text="${'Hi ' + firstName + ','}"></p>
-                            <p class="mb-3 " th:text="${'Thanks for scheduling a meeting for ' + date}"></p>
+                            <p class="mb-3 " th:text="${'Thanks for scheduling a meeting.'}"></p>
                         </div>
                     </div>
                 </div>
@@ -33,9 +33,9 @@
                     <div class="card-body p-5">
                         <div class="mb-3">
                             <h3 class="fw-bold mb-3 ">Details</h3>
-                            <p class="mb-3 " th:text="${'Booking Page: ' + user}"></p>
-                            <p class="mb-3 " th:text="${'Duration: ' + duration}"></p>
-                            <p class="mb-3 " th:text="${'Booking reference: ' + ref}"></p>
+                            <p class="mb-3 " th:text="${'Booking Page: ' + title}"></p>
+                            <p class="mb-3 " th:text="${'Start: ' + start}"></p>
+                            <p class="mb-3 " th:text="${'End: ' + end}"></p>
                         </div>
                     </div>
                 </div>

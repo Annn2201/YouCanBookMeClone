@@ -9,10 +9,9 @@
         rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
         crossorigin="anonymous">
-  <link th:href="@{../static/js/register.js}"
-        rel="script">
   <link rel="icon" type="image/x-icon"
-        href="https://static.crozdesk.com/web_app_library/providers/logos/000/002/674/original/youcanbook.me-1669205148-logo.png?1669205148">
+        href="https://static.c rozdesk.com/web_app_library/providers/logos/000/002/674/original/youcanbook.me-1669205148-logo.png?1669205148">
+  <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="container">
@@ -24,6 +23,11 @@
       <div th:if="${param.success}">
         <div class="alert alert-info">
           You have successfully registered our app!
+        </div>
+      </div>
+      <div th:if="${param.error}">
+        <div class="alert alert-danger">
+          Confirm password and password don't match!!
         </div>
       </div>
       <div class="card-body">

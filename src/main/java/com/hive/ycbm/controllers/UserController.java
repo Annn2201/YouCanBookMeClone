@@ -3,18 +3,10 @@ import com.hive.ycbm.services.UserService;
 import com.hive.ycbm.dto.UserDto;
 import com.hive.ycbm.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.extras.springsecurity6.util.SpringSecurityContextUtils;
-
-import java.util.Optional;
-
 @Controller
 public class UserController {
     @Autowired
@@ -31,12 +23,20 @@ public class UserController {
     }
     @PostMapping("/register")
     public String register(@ModelAttribute("user") User user,
+                           @RequestParam ("confirmPassword") String confirmPassword,
                            BindingResult result,
                            Model model) {
         UserDto existedUser = userService.findByMainEmail(user.getMainEmail());
         if (existedUser.getMainEmail() != null) {
             result.rejectValue("mainEmail", null,
                     "Email is used !!!");
+        }
+        if (user.getPassword().length() < 6) {
+            result.rejectValue("password", null,
+                    "Your password must have 6 characters or more!!");
+        }
+        if (!user.getPassword().equals(confirmPassword)) {
+           return "redirect:/register?error";
         }
         if (result.hasErrors()) {
             model.addAttribute("user", user);
@@ -69,11 +69,13 @@ public class UserController {
                                  @RequestParam(name = "newPassword", required = false) String newPassword,
                                  @RequestParam(name = "confirmNewPassword", required = false) String confirmNewPassword) {
         if (!newPassword.equals(confirmNewPassword)) {
-            // Xử lý lỗi - Mật khẩu mới và xác nhận mật khẩu mới không khớp
-            return "error";
+            return "redirect:/update-password?error";
         }
         if (!userService.checkIfValidOldPassword(password)) {
-            return "redirect:/update-password?error";
+            return "redirect:/update-password?invalid";
+        }
+        if (newPassword.length() < 6) {
+            return "redirect:/update-password?short";
         }
         userService.changePassword(newPassword);
         return "redirect:/update-password?success";

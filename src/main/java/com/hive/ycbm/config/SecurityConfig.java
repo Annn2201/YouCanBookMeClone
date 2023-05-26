@@ -20,8 +20,11 @@ public class SecurityConfig {
                         .requestMatchers("/login/**").permitAll()
                         .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/confirm/**").permitAll()
+                        .requestMatchers("/js/**").permitAll()
+                        .requestMatchers("/create/**").permitAll()
                         .requestMatchers("/user/**").hasRole("ADMIN")
-                        .anyRequest().authenticated())
+                        .requestMatchers("/update-password/**").hasRole("ADMIN")
+                        .anyRequest().denyAll())
                 .formLogin((form) -> form
                         .loginPage("/login")
                         .defaultSuccessUrl("/user"))

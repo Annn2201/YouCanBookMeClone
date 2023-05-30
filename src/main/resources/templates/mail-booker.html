@@ -7,12 +7,6 @@
           rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
           crossorigin="anonymous">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            font-size: 48px;
-        }
-    </style>
 </head>
 <body>
 <div class="vh-100 d-flex justify-content-center align-items-center">
@@ -23,7 +17,7 @@
                 <div class="card bg-white shadow-lg">
                     <div class="card-body p-5">
                         <div class="mb-3">
-                            <h3 class="fw-bold mb-3 ">YouCanBookMe</h3>
+                            <h5 class="fw-bold mb-3 ">YouCanBookMe</h5>
                             <p class="mb-3 " th:text="${'Hi ' + firstName + ','}"></p>
                             <p class="mb-3 " th:text="${'Thanks for scheduling a meeting.'}"></p>
                         </div>
@@ -32,7 +26,7 @@
                 <div class="card bg-white shadow-lg">
                     <div class="card-body p-5">
                         <div class="mb-3">
-                            <h3 class="fw-bold mb-3 ">Details</h3>
+                            <h5 class="fw-bold mb-3 ">Details</h5>
                             <p class="mb-3 " th:text="${'Booking Page: ' + title}"></p>
                             <p class="mb-3 " th:text="${'Start: ' + start}"></p>
                             <p class="mb-3 " th:text="${'End: ' + end}"></p>
@@ -42,7 +36,7 @@
                 <div class="card bg-white shadow-lg">
                     <div class="card-body p-5">
                         <div class="mb-3">
-                            <h3 class="fw-bold mb-3 ">Booking Form</h3>
+                            <h5 class="fw-bold mb-3 ">Booking Form</h5>
                             <p class="mb-3 " th:text="${'First name: ' + firstName}"></p>
                             <p class="mb-3 " th:text="${'Last name: ' + lastName}"></p>
                             <p class="mb-3 " th:text="${'Email: ' + email}"></p>

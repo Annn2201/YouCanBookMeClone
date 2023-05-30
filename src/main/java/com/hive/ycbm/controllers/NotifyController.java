@@ -2,15 +2,17 @@ package com.hive.ycbm.controllers;
 
 import com.hive.ycbm.dto.*;
 import com.hive.ycbm.services.NotificationService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-public class TestController {
+public class NotifyController {
     private final NotificationService notificationService;
 
     @MessageMapping("/message")
@@ -23,5 +25,11 @@ public class TestController {
     @PostMapping("/send-message")
     public void sendMessage(@RequestBody String message) {
         notificationService.notifyMessage(message);
+    }
+
+    @GetMapping("/error")
+    public String showError(HttpServletResponse response, Model model) {
+        model.addAttribute("status", response.getStatus());
+        return "error";
     }
 }

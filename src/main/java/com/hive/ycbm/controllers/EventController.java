@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
@@ -17,16 +18,16 @@ public class EventController {
     private final BookerService bookerService;
     private final MailService mailService;
 
-    @GetMapping("/booking-page")
+    @GetMapping("/event")
     public String showCreateForm() {
         return "booking-page";
     }
-
     @PostMapping("/create-event")
+
     public String createEvent(EventDto eventDto,
-                              Model model) {
-        model.addAttribute("event", eventDto);
-        return "confirm-booking";
+                              Model model, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("event", eventDto);
+        return "redirect:/confirm";
     }
 
     @GetMapping("/confirm")
@@ -37,9 +38,16 @@ public class EventController {
     }
 
     @PostMapping("/confirm")
-    public String confirmEvent(@ModelAttribute("event") EventDto eventDto) throws MessagingException {
+    public String confirmEvent(@ModelAttribute("event") EventDto eventDto,
+                               RedirectAttributes redirectAttributes) throws MessagingException {
         bookerService.createBooker(eventDto);
         mailService.sendMail(userService.loadCurrentUser(), eventDto);
+        redirectAttributes.addFlashAttribute("event", eventDto);
+        return "redirect:/success";
+    }
+
+    @GetMapping("/success")
+    public String showSuccess(@ModelAttribute("event") EventDto eventDto){
         return "success";
     }
 }

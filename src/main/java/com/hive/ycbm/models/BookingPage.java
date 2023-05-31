@@ -18,8 +18,14 @@ public class BookingPage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "page_id")
     private Long pageId;
+
     private String title;
+
+    @Column(unique = true)
+    private  String bookingLink;
+
     private String intro;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

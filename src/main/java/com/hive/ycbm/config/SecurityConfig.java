@@ -23,6 +23,11 @@ public class SecurityConfig {
                         .requestMatchers("/js/**").permitAll()
                         .requestMatchers("/create/**").permitAll()
                         .requestMatchers("/user/**").hasRole("ADMIN")
+                        .requestMatchers("/homepage/**").permitAll()
+                        .requestMatchers("/showFormForEdit/**").hasRole("ADMIN")
+                        .requestMatchers("//bookingPage/**").hasRole("ADMIN")
+                        .requestMatchers("/saveBookingPage/**").hasRole("ADMIN")
+                        .requestMatchers("/**").hasRole("ADMIN")
                         .requestMatchers("/update-password/**").hasRole("ADMIN")
                         .anyRequest().denyAll())
                 .formLogin((form) -> form

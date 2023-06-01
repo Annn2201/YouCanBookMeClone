@@ -18,9 +18,15 @@ public interface UserService {
 
     UserDto loadCurrentUser();
 
-    void changePassword(String newPassword);
+    void changePassword(String email, String newPassword);
 
     boolean checkIfValidOldPassword(String password);
 
     String loadCurrentMailEmail();
+
+    void updateResetPasswordToken(String token, String email);
+
+    void sendResetPasswordEmail(String recipientEmail, String link);
+
+    UserDto getByResetPasswordToken(String token);
 }

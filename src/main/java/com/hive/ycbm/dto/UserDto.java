@@ -13,5 +13,6 @@ public class UserDto {
     private String phone;
     private String organization;
     private String password;
+    private String resetPasswordToken;
 
 }

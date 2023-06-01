@@ -24,8 +24,12 @@ public class User {
     private String lastName;
     private String mainEmail;
     private String password;
+    private String confirmPassword;
+    private String newPassword;
+    private String confirmNewPassword;
     private String phone;
     private String organization;
+    private String resetPasswordToken;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Collection<BookingPage> bookingPages;
     @ManyToMany

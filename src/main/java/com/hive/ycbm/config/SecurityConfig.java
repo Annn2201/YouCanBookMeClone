@@ -21,18 +21,15 @@ public class SecurityConfig {
                         .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/confirm/**").permitAll()
                         .requestMatchers("/js/**").permitAll()
-                        .requestMatchers("/create/**").permitAll()
-                        .requestMatchers("/user/**").hasRole("ADMIN")
-                        .requestMatchers("/homepage/**").permitAll()
-                        .requestMatchers("/showFormForEdit/**").hasRole("ADMIN")
-                        .requestMatchers("//bookingPage/**").hasRole("ADMIN")
-                        .requestMatchers("/saveBookingPage/**").hasRole("ADMIN")
-                        .requestMatchers("/**").hasRole("ADMIN")
-                        .requestMatchers("/update-password/**").hasRole("ADMIN")
-                        .anyRequest().denyAll())
+                        .requestMatchers("/create-event/**").permitAll()
+                        .requestMatchers("/event/**").permitAll()
+                        .requestMatchers("/forget-password/**").permitAll()
+                        .requestMatchers("/reset-password/**").permitAll()
+                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated())
                 .formLogin((form) -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/user"))
+                        .defaultSuccessUrl("/api/v1/admin/"))
                 .logout((logout) -> logout.permitAll());
                 return http.build();
     }

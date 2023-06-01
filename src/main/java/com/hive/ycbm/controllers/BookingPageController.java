@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@RequestMapping("/api/v1/admin")
 public class BookingPageController {
     @Autowired
     private BookingPageService bookingPageService;
@@ -28,7 +29,7 @@ public class BookingPageController {
     @PostMapping("/saveBookingPage")
     public String saveBookingPage(@ModelAttribute("bookingPage") BookingPage bookingPage) {
         bookingPageService.saveBookingPage(bookingPage);
-        return "redirect:/";
+        return "redirect:/api/v1/admin/";
     }
     @GetMapping("/updateBookingPage/{pageId}")
     public String showUpdateBookingPage(@PathVariable(value = "pageId") Long pageId,
@@ -42,7 +43,7 @@ public class BookingPageController {
     public String updateBookingPage(@ModelAttribute("bookingPage") BookingPageDto bookingPageDto
                                     ) {
         bookingPageService.updateBookingPage(bookingPageDto);
-        return "redirect:/updateBookingPage/{pageId}?success";
+        return "redirect:/api/v1/admin/updateBookingPage/{pageId}?success";
     }
 
     @DeleteMapping("/bookingPage/{pageId}")

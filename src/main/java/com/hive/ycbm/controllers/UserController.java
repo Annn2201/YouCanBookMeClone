@@ -43,7 +43,7 @@ public class UserController {
                                          Model model) {
         return "update-password";
     }
-    @PostMapping(value = "/update-password")
+    @PostMapping("/update-password")
     public String updatePassword(@ModelAttribute("currentUser") UserDto userDto,
                                  UpdatePasswordDTO updatePasswordDTO,
                                  Model model) {

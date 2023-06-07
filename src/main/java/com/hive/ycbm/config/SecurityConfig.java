@@ -19,12 +19,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/login/**").permitAll()
                         .requestMatchers("/register/**").permitAll()
-                        .requestMatchers("/confirm/**").permitAll()
                         .requestMatchers("/js/**").permitAll()
-                        .requestMatchers("/create-event/**").permitAll()
-                        .requestMatchers("/event/**").permitAll()
                         .requestMatchers("/forget-password/**").permitAll()
                         .requestMatchers("/reset-password/**").permitAll()
+                        .requestMatchers("/api/v1/**").permitAll()
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin((form) -> form

@@ -55,13 +55,13 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">
+        <a class="nav-link" th:href="@{/api/v1/admin/}">
           Dashboard
           <span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" th:href="@{/booking-page}">
+        <a class="nav-link" th:href="@{/api/v1/event}">
           Bookings
         </a>
       </li>
@@ -94,8 +94,8 @@
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" th:text="${currentUser.mainEmail}">Info</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" th:href="@{/api/vi/admin/user}">Account</a>
-          <a class="dropdown-item" th:href="@{/api/vi/admin/update-password}">Change password</a>
+          <a class="dropdown-item" th:href="@{/api/v1/admin/user}">Account</a>
+          <a class="dropdown-item" th:href="@{/api/v1/admin/update-password}">Change password</a>
           <a class="dropdown-item" th:href="@{/logout}">Logout</a>
         </div>
       </li>
@@ -107,8 +107,8 @@
     <div class="row">
       <div class="col-lg-3">
         <ul>
-          <li><a id="accountOverview" th:href="@{/user}">Account Overview</a></li>
-          <li><a id="updatePassword" th:href="@{/update-password}">Update Password</a></li>
+          <li><a id="accountOverview" th:href="@{/api/v1/admin/user}">Account Overview</a></li>
+          <li><a id="updatePassword" th:href="@{/api/v1/admin/update-password}">Update Password</a></li>
         </ul>
       </div>
     <div class="col-lg-9 personal-info">
@@ -118,7 +118,7 @@
           Member is updated
         </div>
       </div>
-      <form th:action="@{/user}"
+      <form th:action="@{/api/v1/admin/user}"
             th:object="${currentUser}"
             method="post" name="frm-member">
           <div>

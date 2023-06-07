@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class EventController {
     private final EventService eventService;

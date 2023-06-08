@@ -2,14 +2,16 @@ package com.hive.ycbm.services.impl;
 
 import com.hive.ycbm.dto.BookingPageDto;
 import com.hive.ycbm.exception.IDNotFoundException;
+import com.hive.ycbm.exceptions.EmailNotFoundException;
+import com.hive.ycbm.exceptions.UsernameNotFoundException;
 import com.hive.ycbm.models.BookingPage;
+import com.hive.ycbm.models.User;
 import com.hive.ycbm.repositories.BookingPageRepository;
+import com.hive.ycbm.repositories.UserRepository;
 import com.hive.ycbm.services.BookingPageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,16 +19,19 @@ import java.util.stream.Collectors;
 public class BookingPageServiceImpl implements BookingPageService {
     @Autowired
     private BookingPageRepository bookingPageRepository;
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
-    public List<BookingPageDto> getAllBookingPage() {
-        List<BookingPage> bookingPages = bookingPageRepository.findAll();
+    public List<BookingPageDto> getBookingPagesByUser(String email) {
+        User user = userRepository.findByMainEmail(email).orElseThrow(null);
+        List<BookingPage> bookingPages = bookingPageRepository.findByUser(user);
         return bookingPages.stream().map(bookingPage -> BookingPageDto.builder()
                 .pageId(bookingPage.getPageId())
                 .title(bookingPage.getTitle())
                 .bookingLink(bookingPage.getBookingLink())
                 .build()).collect(Collectors.toList());
     }
-
 
     @Override
     public BookingPageDto findById(Long pageId) {
@@ -38,9 +43,10 @@ public class BookingPageServiceImpl implements BookingPageService {
                 .bookingLink(bookingPage.getBookingLink())
                 .build();
     }
-
     @Override
-    public void saveBookingPage(BookingPage bookingPage) {
+    public void saveBookingPage(BookingPage bookingPage, String email)  {
+        User user = userRepository.findByMainEmail(email).orElseThrow(() -> new EmailNotFoundException("Email not found"));
+        bookingPage.setUser(user);
         this.bookingPageRepository.save(bookingPage);
     }
 
@@ -51,10 +57,10 @@ public class BookingPageServiceImpl implements BookingPageService {
         updateBookingPage.setBookingLink(bookingPageDto.getBookingLink());
         bookingPageRepository.save(updateBookingPage);
     }
-
-
     @Override
     public void deleteBookingPage(Long pageId) {
-        this.bookingPageRepository.deleteById(pageId);
+        BookingPage bookingPage = bookingPageRepository.findById(pageId)
+                .orElseThrow(() -> new IDNotFoundException("Booking page not found with id: " + pageId));
+        bookingPageRepository.delete(bookingPage);
     }
 }

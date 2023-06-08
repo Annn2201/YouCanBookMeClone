@@ -5,5 +5,5 @@ import com.hive.ycbm.dto.UserDto;
 import jakarta.mail.MessagingException;
 
 public interface MailService {
-    void sendMail(UserDto userDto, EventDto eventDto) throws MessagingException;
+    void sendMail(UserDto userDto, EventDto eventDto);
 }

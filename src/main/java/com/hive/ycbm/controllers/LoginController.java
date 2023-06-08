@@ -1,7 +1,6 @@
 package com.hive.ycbm.controllers;
 
 import com.hive.ycbm.dto.ResetPasswordDto;
-import com.hive.ycbm.dto.UpdatePasswordDTO;
 import com.hive.ycbm.dto.UserDto;
 import com.hive.ycbm.models.User;
 import com.hive.ycbm.services.UserService;
@@ -86,4 +85,8 @@ public class LoginController {
         return "redirect:/reset-password?success";
     }
 
+    @GetMapping("/login/google")
+    public String loginWithGoogle() {
+        return "redirect:/oauth2/authorization/google";
+    }
 }

@@ -2,7 +2,6 @@ package com.hive.ycbm.controllers;
 
 import com.hive.ycbm.dto.EventDto;
 import com.hive.ycbm.services.*;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +23,6 @@ public class EventController {
         return "booking-page";
     }
     @PostMapping("/create-event")
-
     public String createEvent(EventDto eventDto,
                               Model model, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("event", eventDto);
@@ -40,7 +38,7 @@ public class EventController {
 
     @PostMapping("/confirm")
     public String confirmEvent(@ModelAttribute("event") EventDto eventDto,
-                               RedirectAttributes redirectAttributes) throws MessagingException {
+                               RedirectAttributes redirectAttributes) {
         bookerService.createBooker(eventDto);
         mailService.sendMail(userService.loadCurrentUser(), eventDto);
         redirectAttributes.addFlashAttribute("event", eventDto);

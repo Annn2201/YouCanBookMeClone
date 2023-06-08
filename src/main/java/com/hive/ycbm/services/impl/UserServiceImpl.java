@@ -1,5 +1,7 @@
 package com.hive.ycbm.services.impl;
 
+import com.hive.ycbm.exceptions.CustomException;
+import com.hive.ycbm.models.CustomOAuth2User;
 import com.hive.ycbm.repositories.RoleRepository;
 import com.hive.ycbm.repositories.UserRepository;
 import com.hive.ycbm.services.UserService;
@@ -8,6 +10,7 @@ import com.hive.ycbm.models.Role;
 import com.hive.ycbm.models.User;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -104,10 +107,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public String loadCurrentMailEmail() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!(principal instanceof UserDetails)) {
-            return null;
+        String email = new String();
+        if (principal instanceof UserDetails) {
+            email = ((UserDetails) principal).getUsername();
+        } else if (principal instanceof CustomOAuth2User) {
+            email = ((CustomOAuth2User) principal).getEmail();
+        } else {
+            email = null;
         }
-        return ((UserDetails) principal).getUsername();
+        return email;
     }
 
     @Override
@@ -124,15 +132,17 @@ public class UserServiceImpl implements UserService {
         userWannaChangePassword.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(userWannaChangePassword);
     }
+
     @Override
     public void updateResetPasswordToken(String token, String email) {
         User user = userRepository.findByMainEmail(email).orElse(null);
-        if(user == null) {
+        if (user == null) {
             throw new UsernameNotFoundException("Your email is wrong! Please enter again!");
         }
         user.setResetPasswordToken(token);
         userRepository.save(user);
     }
+
     @Override
     public UserDto getByResetPasswordToken(String token) {
         User user = userRepository.findByResetPasswordToken(token).orElse(null);
@@ -147,6 +157,7 @@ public class UserServiceImpl implements UserService {
                 .resetPasswordToken(user.getResetPasswordToken())
                 .build();
     }
+
     @Override
     public void sendResetPasswordEmail(String recipientEmail, String link) {
         try {
@@ -165,10 +176,16 @@ public class UserServiceImpl implements UserService {
             helper.setSubject(subject);
             helper.setText(content, true);
             javaMailSender.send(message);
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
+        } catch (MessagingException | UnsupportedEncodingException e) {
+            throw new CustomException("Error with MineMessage", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Override
+    public void saveOauth2(String email, String name) {
+        User user = new User();
+        user.setFirstName(name);
+        user.setMainEmail(email);
+        userRepository.save(user);
     }
 }

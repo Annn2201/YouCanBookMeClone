@@ -25,6 +25,6 @@ public class OAuth2LoginController extends SimpleUrlAuthenticationSuccessHandler
         if (existedUser.getMainEmail() == null) {
             userService.saveOauth2(oauthUser.getEmail(), oauthUser.getName());
         }
-        response.sendRedirect("/api/v1/admin/");
+        response.sendRedirect("/admin/");
     }
 }

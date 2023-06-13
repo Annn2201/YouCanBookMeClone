@@ -34,12 +34,14 @@ public class SecurityConfig {
                         .requestMatchers("/js/**").permitAll()
                         .requestMatchers("/forget-password/**").permitAll()
                         .requestMatchers("/reset-password/**").permitAll()
-                        .requestMatchers("/api/v1/**").permitAll()
-                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/event").permitAll()
+                        .requestMatchers("/create-event").permitAll()
+                        .requestMatchers("/confirm").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin((form) -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/api/v1/admin/"))
+                        .defaultSuccessUrl("/admin/"))
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
                         .userInfoEndpoint()

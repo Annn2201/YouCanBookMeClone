@@ -38,9 +38,12 @@ public class LoginController {
                            BindingResult result,
                            Model model) {
         UserDto existedUser = userService.findByMainEmail(user.getMainEmail());
-        if (existedUser.getMainEmail() != null) {
+        if (existedUser != null) {
             result.rejectValue("mainEmail", null,
                     "Email is used !!!");
+            model.addAttribute("user", user);
+            return "/register";
+
         }
         userService.save(user);
         return "redirect:/register?success";

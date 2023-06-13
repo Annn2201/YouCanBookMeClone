@@ -1,5 +1,6 @@
 package com.hive.ycbm.dto;
 
+import com.hive.ycbm.models.Calendar;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -21,6 +22,7 @@ public class EventDto implements Serializable {
     private LocalDateTime start;
     private Duration duration;
     private BookerDto booker;
+    private Calendar calendar;
 
 
 }

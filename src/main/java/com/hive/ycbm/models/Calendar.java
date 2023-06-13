@@ -22,9 +22,7 @@ public class Calendar {
     private String calendarEmail;
     @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL)
     private Collection<Event> events;
-    @ManyToMany
-    @JoinTable(name = "calendar_page",
-            joinColumns = @JoinColumn(name = "calendar_id"),
-            inverseJoinColumns = @JoinColumn(name = "page_id"))
-    private Collection<BookingPage> bookingPages;
+    @OneToOne
+    @JoinColumn(name = "booking_page_id")
+    private BookingPage bookingPage;
 }

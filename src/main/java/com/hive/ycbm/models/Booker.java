@@ -26,4 +26,5 @@ public class Booker {
     @OneToMany
     @JoinColumn(name = "event_id")
     private List<Event> events;
+
 }

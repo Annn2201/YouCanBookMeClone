@@ -1,6 +1,10 @@
 package com.hive.ycbm.dto;
+import com.hive.ycbm.models.Calendar;
 import jakarta.persistence.Column;
 import lombok.*;
+
+import java.util.Collection;
+
 @Getter
 @Setter
 @NoArgsConstructor

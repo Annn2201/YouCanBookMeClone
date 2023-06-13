@@ -29,7 +29,7 @@ public class Event {
     @JoinColumn(name = "booker_id")
     private Booker booker;
     @ManyToMany(mappedBy = "events")
-    private Collection<User> users;
+    private Collection<User> user;
 
 
 

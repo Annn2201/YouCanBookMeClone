@@ -29,6 +29,4 @@ public class BookingPage {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @ManyToMany(mappedBy = "bookingPages")
-    private Collection<Calendar> calendars;
 }

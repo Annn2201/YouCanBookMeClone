@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.UnsupportedEncodingException;
 
 @Controller
-@RequestMapping("/api/v1/admin")
+@RequestMapping("/admin")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -35,7 +35,7 @@ public class UserController {
     @PostMapping("/user")
     public String editProfile(@ModelAttribute("currentUser") UserDto userDto) {
         userService.update(userDto);
-        return "redirect:/api/v1/admin/user?success";
+        return "redirect:/admin/user?success";
     }
 
     @GetMapping("/update-password")
@@ -48,9 +48,9 @@ public class UserController {
                                  UpdatePasswordDTO updatePasswordDTO,
                                  Model model) {
         if (!userService.checkIfValidOldPassword(updatePasswordDTO.getPassword())) {
-            return "redirect:/api/v1/admin/update-password?invalid";
+            return "redirect:/admin/update-password?invalid";
         }
         userService.changePassword(userService.loadCurrentMailEmail(), updatePasswordDTO.getNewPassword());
-        return "redirect:/api/v1/admin/update-password?success";
+        return "redirect:/admin/update-password?success";
     }
 }

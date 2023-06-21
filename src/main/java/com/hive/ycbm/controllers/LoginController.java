@@ -38,7 +38,7 @@ public class LoginController {
                            BindingResult result,
                            Model model) {
         UserDto existedUser = userService.findByMainEmail(user.getMainEmail());
-        if (existedUser != null) {
+        if (existedUser.getMainEmail() != null) {
             result.rejectValue("mainEmail", null,
                     "Email is used !!!");
             model.addAttribute("user", user);

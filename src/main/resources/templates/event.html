@@ -65,13 +65,13 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link"th:href="@{/admin/}">
+        <a class="nav-link" href="#">
           Dashboard
           <span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" >
+        <a class="nav-link" th:href="@{/event}">
           Bookings
         </a>
       </li>
@@ -104,8 +104,8 @@
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" th:text="${currentUser.mainEmail}">Info</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" th:href="@{/admin/user}">Account</a>
-          <a class="dropdown-item" th:href="@{/admin/update-password}">Change password</a>
+          <a class="dropdown-item" th:href="@{admin/user}">Account</a>
+          <a class="dropdown-item" th:href="@{admin/update-password}">Change password</a>
           <a class="dropdown-item" th:href="@{/logout}">Logout</a>
         </div>
       </li>
@@ -114,79 +114,63 @@
 </nav>
 
 <div class="container">
-  <h1>Booking Dashboard</h1>
-  <button class="btn btn-primary" data-toggle="modal" data-target="#createBookingModal">Create Booking Page</button>
+  <h1>Event Dashboard</h1>
+  <div th:if="${param.error}">
+    <div class="alert alert-danger">
+      No event has been created!!!
+    </div>
+  </div>
+  <form th:action="@{/event/{pageId}(pageId=${bookingPage.pageId})}" th:object="${listEvent}">
+    <button class="btn btn-primary" type="submit"  ata-toggle="modal" data-target="#createBookingModal">Create Event</button>
+  </form>
+
   <hr>
-  <h2>Booking Pages</h2>
+  <h2>Event</h2>
   <table class="table">
     <thead>
     <tr>
-      <th>Title</th>
-      <th>Booking Link</th>
+      <th>Event Title</th>
+      <th>Start Time</th>
+      <th>End Time</th>
+<!--      <th>Booking</th>-->
+<!--      <th>Booking Link</th>-->
       <th>Actions</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="bookingPage : ${listBookingPage}">
-      <td th:text="${bookingPage.title}"></td>
-      <td th:text="${bookingPage.bookingLink}"></td>
+    <tr th:each="event : ${listEvent}">
+      <td th:text="${event.eventTitle}"></td>
+      <td th:text="${event.start}"></td>
+      <td th:text="${event.end}"></td>
+
       <td>
-        <a th:href="@{/event-dashboard/{id}(id=${bookingPage.pageId})}" class="btn btn-primary">View Event</a>
-        <a th:href="@{/admin/booking-page/{id}(id=${bookingPage.pageId})}" class="btn btn-primary">Edit</a>
-        <a th:id="${bookingPage.pageId}" class="btn btn-danger delete-btn">Delete</a>
+        <a href="#" class="btn btn-primary">Detail Event</a>
+        <a href="#" class="btn btn-primary">Rebook</a>
+        <a th:id="${event.eventId}" class="btn btn-danger delete-btn">Delete</a>
       </td>
     </tr>
     </tbody>
   </table>
 </div>
 
-<div id="createBookingModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Create Booking Page</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <form id="addEventForm" th:action="@{/admin/booking-page}" method="post" th:object="${bookingPage}">
-          <div class="form-group">
-            <label>Booking Title:</label>
-            <input type="text" class="form-control"
-                   th:field="*{title}">
-          </div>
-          <div class="form-group">
-            <label>Booking Link:</label>
-            <div class="input-group">
-              <input type="text" name="email" class="form-control"
-                     th:field="*{bookingLink}">
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-success">Create</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+
 <script>
   $(document).ready(function() {
-    $('.delete-btn').click(function(e) {
-      e.preventDefault();
-      var pageId = $(this).attr("id");
-      var trCloset = $(this).closest('tr')
-      $.ajax({
-        url: '/admin/booking-page/' + pageId,
-        type: 'DELETE',
-        success: function(response) {
-          trCloset.remove();
-        },
-        error: function(xhr, status, error) {
-          console.log(error);
-        }
+      $('.delete-btn').click(function(e) {
+          e.preventDefault();
+          var eventId = $(this).attr("id");
+          var trCloset = $(this).closest('tr')
+          $.ajax({
+              url: '/event-dashboard/' + eventId,
+              type: 'DELETE',
+              success: function(response) {
+                  trCloset.remove();
+              },
+              error: function(xhr, status, error) {
+                  console.log(error);
+              }
+          });
       });
-    });
   });
 
 </script>

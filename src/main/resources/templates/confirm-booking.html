@@ -32,11 +32,13 @@
                         <form class="mb-4 mt-md-4"
                               method="post"
                               role="form"
-                              th:action="@{/confirm}"
+                              th:action="@{/confirm/{pageId}(pageId = ${bookingPage.pageId})}"
                               th:object="${event}"
                         >
                             <h1 class="mb-4 ">Enter Your Personal Information</h1>
                             <div class="mb-3">
+                                <input type="hidden" class="form-control" id="pageId"
+                                        th:value="${event.calendar}">
                                 <label for="eventTitle" class="form-label fw-bold">Event Title</label>
                                 <input type="text" class="form-control" id="eventTitle"
                                        th:value="${event.eventTitle}" th:name="eventTitle">

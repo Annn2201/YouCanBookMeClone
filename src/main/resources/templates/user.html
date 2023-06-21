@@ -127,19 +127,19 @@
           <div class="form-group">
             <label class="control-label">First name:</label>
             <div class="col-md-100">
-              <input class="form-control" type="text" th:field="${currentUser.firstName}">
+              <input class="form-control" type="text" th:field="${currentUser.firstName}" readonly>
             </div>
           </div>
           <div class="form-group">
             <label class="control-label">Last name:</label>
             <div class="col-lg-100">
-              <input class="form-control" type="text" value="" th:field="${currentUser.lastName}">
+              <input class="form-control" type="text" value="" th:field="${currentUser.lastName}" readonly>
             </div>
           </div>
           <div class="form-group">
             <label class="control-label">Email:</label>
             <div class="col-lg-100">
-              <input class="form-control" type="email" value="" th:field="${currentUser.mainEmail}" readonly>
+              <input class="form-control" type="email" value="" th:field="${currentUser.mainEmail}">
             </div>
           </div>
           <div class="form-group">

@@ -3,13 +3,16 @@ package com.hive.ycbm.services.impl;
 import com.hive.ycbm.dto.BookingPageDto;
 import com.hive.ycbm.exceptions.CustomException;
 import com.hive.ycbm.models.BookingPage;
+import com.hive.ycbm.models.Calendar;
 import com.hive.ycbm.models.User;
 import com.hive.ycbm.repositories.BookingPageRepository;
+import com.hive.ycbm.repositories.CalendarRepository;
 import com.hive.ycbm.repositories.UserRepository;
 import com.hive.ycbm.services.BookingPageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,27 +34,30 @@ public class BookingPageServiceImpl implements BookingPageService {
                 .bookingLink(bookingPage.getBookingLink())
                 .build()).collect(Collectors.toList());
     }
-
     @Override
-    public BookingPageDto findById(Long pageId) {
+    public BookingPage findById(Long pageId) {
         BookingPage bookingPage = bookingPageRepository.findById(pageId)
-                .orElseThrow(() -> new CustomException("Booking page not found with id: " + pageId,
-                        HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException("Booking page not found with id: " + pageId));
+        return bookingPage;
+    }
+    @Override
+    public BookingPageDto getBookingPageById(Long pageId) {
+        BookingPage bookingPage = bookingPageRepository.findById(pageId)
+                .orElseThrow(() -> new CustomException("Booking page not found with id: " + pageId));
         return BookingPageDto.builder()
                 .pageId(bookingPage.getPageId())
                 .title(bookingPage.getTitle())
                 .bookingLink(bookingPage.getBookingLink())
                 .build();
     }
-
     @Override
-    public void saveBookingPage(BookingPage bookingPage, String email) {
-        User user = userRepository.findByMainEmail(email).orElseThrow(() -> new CustomException("Email not found",
-                HttpStatus.NOT_FOUND));
+    public void saveBookingPage(BookingPage bookingPage, String email, Calendar calendar)  {
+        User user = userRepository.findByMainEmail(email).orElseThrow(() -> new CustomException("Email not found"));
+        calendar.setCalendarEmail(email);
+        calendar.setBookingPage(bookingPage);
         bookingPage.setUser(user);
         this.bookingPageRepository.save(bookingPage);
     }
-
     @Override
     public void updateBookingPage(BookingPageDto bookingPageDto) {
         BookingPage updateBookingPage = bookingPageRepository.findById(bookingPageDto.getPageId())
@@ -61,7 +67,6 @@ public class BookingPageServiceImpl implements BookingPageService {
         updateBookingPage.setBookingLink(bookingPageDto.getBookingLink());
         bookingPageRepository.save(updateBookingPage);
     }
-
     @Override
     public void deleteBookingPage(Long pageId) {
         BookingPage bookingPage = bookingPageRepository.findById(pageId)

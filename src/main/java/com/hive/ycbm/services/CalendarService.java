@@ -6,6 +6,9 @@ import com.hive.ycbm.dto.EventDto;
 import com.hive.ycbm.models.BookingPage;
 import com.hive.ycbm.models.Calendar;
 
-public interface BookerService {
-    void createBooker(EventDto eventDto, BookingPage bookingPage);
+import java.util.Optional;
+
+public interface CalendarService {
+    void save(Calendar calendar);
+    Calendar findByBookingPage(BookingPage bookingPage);
 }

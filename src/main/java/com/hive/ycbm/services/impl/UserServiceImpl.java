@@ -94,6 +94,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void update(UserDto userDto) {
         User updateUser = userRepository.findByMainEmail(userDto.getMainEmail()).orElse(new User());
+        updateUser.setFirstName(userDto.getFirstName());
+        updateUser.setLastName(userDto.getLastName());
         updateUser.setPhone(userDto.getPhone());
         updateUser.setOrganization(userDto.getOrganization());
         userRepository.save(updateUser);
@@ -107,15 +109,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public String loadCurrentMailEmail() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email = new String();
+        String mail = null;
         if (principal instanceof UserDetails) {
-            email = ((UserDetails) principal).getUsername();
+            mail = ((UserDetails) principal).getUsername();
         } else if (principal instanceof CustomOAuth2User) {
-            email = ((CustomOAuth2User) principal).getEmail();
+            mail = ((CustomOAuth2User) principal).getAttribute("email");
         } else {
-            email = null;
+            mail = null;
         }
-        return email;
+        return mail;
     }
 
     @Override
@@ -179,13 +181,5 @@ public class UserServiceImpl implements UserService {
         } catch (MessagingException | UnsupportedEncodingException e) {
             throw new CustomException("Error with MineMessage", HttpStatus.BAD_REQUEST);
         }
-    }
-
-    @Override
-    public void saveOauth2(String email, String name) {
-        User user = new User();
-        user.setFirstName(name);
-        user.setMainEmail(email);
-        userRepository.save(user);
     }
 }

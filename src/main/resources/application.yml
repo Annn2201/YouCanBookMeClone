@@ -41,11 +41,9 @@ spring:
           google:
             client-secret: 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
             client-id: 885206176344-7ppl89dobit51bthb75u5tg5s9491o4k.apps.googleusercontent.com
-            scope:
-              - email
-              - profile
-logging:
-  level:
-    com.hive.ycbm: INFO
-  file:
-    name: application.log
+            scope: email, profile
+# logging:
+#   level:
+#     org.springframework.security: DEBUG
+#   file:
+#     name: application.log

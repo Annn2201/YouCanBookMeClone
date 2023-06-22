@@ -1,5 +1,7 @@
 var stompClient = null;
 var notificationCount = 0;
+var firstName = $("#firstName");
+var email = $("#email");
 
 $(document).ready(function () {
     connect();
@@ -22,7 +24,6 @@ function connect() {
             notificationCount = notificationCount + 1;
             updateNotificationDisplay();
         });
-
     });
 }
 
@@ -31,8 +32,8 @@ function showMessage(message) {
 }
 
 function sendMessage() {
-    var text = "From: " + document.getElementById('firstName').value + " - "
-                                + document.getElementById('email').value;
+    var text = "From: " + firstName.val() + " - "
+                                + email.val();
     stompClient.send("/ws/message", {}, JSON.stringify(text));
 }
 

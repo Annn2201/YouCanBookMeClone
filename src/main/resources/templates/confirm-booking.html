@@ -32,6 +32,7 @@
                         <form class="mb-4 mt-md-4"
                               method="post"
                               role="form"
+                              id="form"
                               th:action="@{/public/confirm/{pageId}(pageId = ${bookingPage.pageId})}"
                               th:object="${event}"
                         >
@@ -68,7 +69,8 @@
                                        placeholder="name@example.com">
                             </div>
                             <div class="d-grid">
-                                <input class="btn btn-outline-success" type="submit" value="Confirm Booking"/>
+<!--                                <input class="btn btn-outline-success" type="submit" value="Confirm Booking"/>-->
+                                <button class="btn btn-outline-success" type="submit" id="send" th:onclick="sendMessage()">Confirm Booking</button>
                             </div>
                         </form>
                     </div>
@@ -77,5 +79,9 @@
         </div>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+<script type="text/javascript" th:src="@{/js/message.js}"></script>
 </body>
 </html>

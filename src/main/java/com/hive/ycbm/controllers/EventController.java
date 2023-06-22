@@ -6,9 +6,6 @@ import com.hive.ycbm.dto.UserDto;
 import com.hive.ycbm.models.BookingPage;
 import com.hive.ycbm.models.Calendar;
 import com.hive.ycbm.models.Event;
-import com.hive.ycbm.repositories.BookingPageRepository;
-import com.hive.ycbm.repositories.CalendarRepository;
-import com.hive.ycbm.repositories.EventRepository;
 import com.hive.ycbm.services.*;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -55,7 +51,7 @@ public class EventController {
         List<EventDto> eventDto = eventService.getEventByCalendar(calendar);
         model.addAttribute("listEvent", eventDto);
         model.addAttribute("bookingPage", bookingPage);
-        return "event";
+        return "event-dashboard";
     }
     @GetMapping("/public/confirm/{pageId}")
     public String showConfirmForm(@PathVariable(value = "pageId") Long pageId,
@@ -65,17 +61,14 @@ public class EventController {
     }
     @PostMapping("/public/confirm/{pageId}")
     public String confirmEvent(@PathVariable(value = "pageId") Long pageId,
-                               @ModelAttribute("event") EventDto eventDto,
-                               RedirectAttributes redirectAttributes) throws MessagingException {
+                               @ModelAttribute("event") EventDto eventDto) throws MessagingException {
         BookingPage bookingPage = bookingPageService.findById(pageId);
         bookerService.createBooker(eventDto, bookingPage);
         mailService.sendMail(userService.loadCurrentUser(), eventDto);
-        redirectAttributes.addFlashAttribute("event", eventDto);
         return "redirect:/public/success/";
     }
     @GetMapping("/public/success/")
-    public String showSuccess(@ModelAttribute("event") EventDto eventDto,
-                              @ModelAttribute("bookingPage") BookingPage bookingPage){
+    public String showSuccess(){
         return "success";
     }
     @DeleteMapping("/event-dashboard/{pageId}")

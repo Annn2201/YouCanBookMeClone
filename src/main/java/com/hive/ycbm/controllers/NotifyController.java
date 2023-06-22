@@ -28,8 +28,7 @@ public class NotifyController {
     }
 
     @GetMapping("/error")
-    public String showError(HttpServletResponse response, Model model) {
-        model.addAttribute("status", response.getStatus());
+    public String showError(@ModelAttribute("status") int status) {
         return "error";
     }
 }

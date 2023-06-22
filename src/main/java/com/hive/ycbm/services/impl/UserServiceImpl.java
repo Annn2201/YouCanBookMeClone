@@ -122,7 +122,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean checkIfValidOldPassword(String password) {
-        if (!passwordEncoder.matches(password, loadCurrentUser().getPassword())) {
+        if (password == "" && loadCurrentUser().getPassword() == null){
+            return true;
+        }
+        else if (!passwordEncoder.matches(password, loadCurrentUser().getPassword())) {
             return false;
         }
         return true;

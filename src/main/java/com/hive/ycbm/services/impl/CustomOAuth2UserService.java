@@ -27,10 +27,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
-
         String email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("name");
-
         Optional<User> userOptional = userRepository.findByMainEmail(email);
         User user;
         if (userOptional.isPresent()) {
@@ -46,7 +44,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             user.setRoles(List.of(role));
             userRepository.save(user);
         }
-
         return new CustomOAuth2User(oAuth2User.getAttributes(), user);
     }
 }

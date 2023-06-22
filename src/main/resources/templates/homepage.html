@@ -129,7 +129,7 @@
     <tbody>
     <tr th:each="bookingPage : ${listBookingPage}">
       <td th:text="${bookingPage.title}"></td>
-      <td th:text="${bookingPage.bookingLink}"></td>
+      <td><a th:href="@{/event/{pageId}(pageId=${bookingPage.pageId})}" target="_blank" th:text="${bookingPage.bookingLink + '.ycbm'}"></a></td>
       <td>
         <a th:href="@{/event-dashboard/{id}(id=${bookingPage.pageId})}" class="btn btn-primary">View Event</a>
         <a th:href="@{/admin/booking-page/{id}(id=${bookingPage.pageId})}" class="btn btn-primary">Edit</a>

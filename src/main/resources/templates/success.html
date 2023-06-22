@@ -28,8 +28,7 @@
             <div class="text-center">
                 <h1>Thank You!</h1>
                 <p>We've send the mail to your inbox</p>
-                <button class="btn btn-outline-success" id="send" th:onclick="sendMessage()"><a
-                        th:href="@{/event-dashboard/{id}(id=${event.eventId})}" style="text-decoration: none">Click Here To Receive Notifications</a></button>
+                <button class="btn btn-outline-success" id="send" th:onclick="sendMessage()">Click Here To Receive Notifications</button>
                 <input type="hidden" id="firstName" th:field="${event.booker.firstName}">
                 <input type="hidden" id="email" th:field="${event.booker.email}">
             </div>

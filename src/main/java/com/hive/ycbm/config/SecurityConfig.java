@@ -30,7 +30,7 @@ public class SecurityConfig {
                         .requestMatchers("/js/**").permitAll()
                         .requestMatchers("/forget-password/**").permitAll()
                         .requestMatchers("/reset-password/**").permitAll()
-                        .requestMatchers("/event").permitAll()
+                        .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/create-event").permitAll()
                         .requestMatchers("/confirm").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")

@@ -31,12 +31,12 @@ public class EventController {
     private final MailService mailService;
     private final CalendarService calendarService;
     private final BookingPageService bookingPageService;
-    @GetMapping("/event/{pageId}")
+    @GetMapping("/public/event/{pageId}")
     public String showCreateForm(@PathVariable("pageId") Long pageId,
                                  @ModelAttribute("bookingPage") BookingPageDto bookingPageDto) {
         return "booking-page";
     }
-    @RequestMapping("/create-event/{pageId}")
+    @RequestMapping("/public/create-event/{pageId}")
     public String createEvent(EventDto eventDto,
                               @ModelAttribute("bookingPage") BookingPageDto bookingPageDto,
                               Model model) {
@@ -45,8 +45,8 @@ public class EventController {
     }
     @GetMapping("/event-dashboard/{pageId}")
     public String viewEventDashBoard(@ModelAttribute("currentUser") UserDto userDto,
-                                @PathVariable("pageId") Long pageId, Event event,
-                                Model model) {
+                                     @PathVariable("pageId") Long pageId, Event event,
+                                     Model model) {
         String email = userService.loadCurrentMailEmail();
         model.addAttribute("event", event);
 
@@ -57,24 +57,25 @@ public class EventController {
         model.addAttribute("bookingPage", bookingPage);
         return "event";
     }
-    @GetMapping("/confirm/{pageId}")
+    @GetMapping("/public/confirm/{pageId}")
     public String showConfirmForm(@PathVariable(value = "pageId") Long pageId,
                                   @ModelAttribute("bookingPage") BookingPageDto bookingPageDto,
                                   @ModelAttribute("event")EventDto eventDto) {
         return "confirm-booking";
     }
-    @PostMapping("/confirm/{pageId}")
+    @PostMapping("/public/confirm/{pageId}")
     public String confirmEvent(@PathVariable(value = "pageId") Long pageId,
-                                   @ModelAttribute("event") EventDto eventDto,
+                               @ModelAttribute("event") EventDto eventDto,
                                RedirectAttributes redirectAttributes) throws MessagingException {
         BookingPage bookingPage = bookingPageService.findById(pageId);
         bookerService.createBooker(eventDto, bookingPage);
         mailService.sendMail(userService.loadCurrentUser(), eventDto);
         redirectAttributes.addFlashAttribute("event", eventDto);
-        return "redirect:/success";
+        return "redirect:/public/success/";
     }
-    @GetMapping("/success")
-    public String showSuccess(@ModelAttribute("event") EventDto eventDto){
+    @GetMapping("/public/success/")
+    public String showSuccess(@ModelAttribute("event") EventDto eventDto,
+                              @ModelAttribute("bookingPage") BookingPage bookingPage){
         return "success";
     }
     @DeleteMapping("/event-dashboard/{pageId}")

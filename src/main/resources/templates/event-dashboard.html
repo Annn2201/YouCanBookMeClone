@@ -134,28 +134,6 @@
     </tbody>
   </table>
 </div>
-
-
-<script>
-  $(document).ready(function() {
-      $('.delete-btn').click(function(e) {
-          e.preventDefault();
-          var eventId = $(this).attr("id");
-          var trCloset = $(this).closest('tr')
-          $.ajax({
-              url: '/event-dashboard/' + eventId,
-              type: 'DELETE',
-              success: function(response) {
-                  trCloset.remove();
-              },
-              error: function(xhr, status, error) {
-                  console.log(error);
-              }
-          });
-      });
-  });
-
-</script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
@@ -170,5 +148,24 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 <script type="text/javascript" th:src="@{/js/message.js}"></script>
+<script>
+  $(document).ready(function() {
+    $('.delete-btn').click(function(e) {
+      e.preventDefault();
+      var eventId = $(this).attr("id");
+      var trCloset = $(this).closest('tr')
+      $.ajax({
+        url: '/event-dashboard/' + eventId,
+        type: 'DELETE',
+        success: function(response) {
+          trCloset.remove();
+        },
+        error: function(xhr, status, error) {
+          console.log(error);
+        }
+      });
+    });
+  });
+</script>
 </body>
 </html>

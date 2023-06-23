@@ -38,6 +38,41 @@
     .dropdown-toggle::after {
       display: none;
     }
+
+    .modal-title {
+      color: #333;
+      font-weight: bold;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .modal-body .form-group label {
+      font-weight: bold;
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .modal-body .form-control {
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    .modal-footer {
+      border-top: none;
+      padding: 15px 0;
+      text-align: right;
+    }
+
+    .modal-footer .btn-secondary {
+      background-color: #ccc;
+      color: #fff;
+      border: none;
+      padding: 8px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
@@ -102,7 +137,7 @@
       No event has been created!!!
     </div>
   </div>
-  <form th:action="@{/public/event/{pageId}(pageId=${bookingPage.pageId})}" th:object="${listEvent}">
+  <form th:action="@{/public/event/{pageId}(pageId=${bookingPage.pageId})}" target="_blank" th:object="${listEvent}">
     <button class="btn btn-primary" type="submit"  ata-toggle="modal" data-target="#createBookingModal">Create Event</button>
   </form>
 
@@ -126,7 +161,8 @@
       <td th:text="${event.end}"></td>
 
       <td>
-        <a href="#" class="btn btn-primary">Detail Event</a>
+        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#eventDetailModal"
+           th:onclick="showEventDetail([[${event.eventTitle}]], [[${event.start}]], [[${event.end}]])">Detail Event</a>
         <a href="#" class="btn btn-primary">Rebook</a>
         <a th:id="${event.eventId}" class="btn btn-danger delete-btn">Delete</a>
       </td>
@@ -134,6 +170,38 @@
     </tbody>
   </table>
 </div>
+<!-- Modal for Event Detail -->
+<div class="modal fade" id="eventDetailModal" tabindex="-1" role="dialog" aria-labelledby="eventDetailModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eventDetailModalLabel">Event Detail</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="eventTitle">Event Title:</label>
+          <input type="text" class="form-control" id="eventTitle" readonly>
+        </div>
+        <div class="form-group">
+          <label for="startTime">Start Time:</label>
+          <input type="text" class="form-control" id="startTime" readonly>
+        </div>
+        <div class="form-group">
+          <label for="endTime">End Time:</label>
+          <input type="text" class="form-control" id="endTime" readonly>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
@@ -167,5 +235,13 @@
     });
   });
 </script>
+<script>
+  function showEventDetail(eventTitle, startTime, endTime) {
+    document.getElementById('eventTitle').value = eventTitle;
+    document.getElementById('startTime').value = startTime;
+    document.getElementById('endTime').value = endTime;
+  }
+</script>
+
 </body>
 </html>

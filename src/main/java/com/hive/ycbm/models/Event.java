@@ -22,7 +22,7 @@ public class Event {
     private LocalDateTime end;
     private LocalDateTime start;
     private Duration duration;
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "calendar_id")
     private Calendar calendar;
     @ManyToOne
@@ -30,7 +30,4 @@ public class Event {
     private Booker booker;
     @ManyToMany(mappedBy = "events")
     private Collection<User> user;
-
-
-
 }

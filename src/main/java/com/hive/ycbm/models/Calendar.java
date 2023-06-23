@@ -22,7 +22,4 @@ public class Calendar {
     private String calendarEmail;
     @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL)
     private Collection<Event> events;
-    @OneToOne
-    @JoinColumn(name = "booking_page_id")
-    private BookingPage bookingPage;
 }

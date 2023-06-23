@@ -10,5 +10,5 @@ import java.util.Optional;
 
 public interface CalendarService {
     void save(Calendar calendar);
-    Calendar findByBookingPage(BookingPage bookingPage);
+    Calendar findById(Long id);
 }

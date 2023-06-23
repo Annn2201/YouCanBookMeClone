@@ -24,19 +24,6 @@ public class EventServiceImpl implements EventService {
     private UserRepository userRepository;
     @Autowired
     private BookerRepository bookerRepository;
-
-    @Override
-    public List<EventDto> getEventByUser(String email) {
-        User user = userRepository.findByMainEmail(email).orElseThrow(() -> new CustomException("Event not found with email: " + email));
-        List<Event> events = eventRepository.findByUser(user);
-        return events.stream().map(event -> EventDto.builder()
-                .eventId(event.getEventId())
-                .eventTitle(event.getEventTitle())
-                .start(event.getStart())
-                .end(event.getEnd())
-                .build()).collect(Collectors.toList());
-    }
-
     @Override
     public List<EventDto> getEventByCalendar(Calendar calendar) {
         List<Event> events = eventRepository.findByCalendar(calendar);
@@ -45,19 +32,9 @@ public class EventServiceImpl implements EventService {
                 .eventTitle(event.getEventTitle())
                 .start(event.getStart())
                 .end(event.getEnd())
+                .booker(event.getBooker())
+                .calendar(event.getCalendar())
                 .build()).collect(Collectors.toList());
-    }
-
-    @Override
-    public EventDto findByEventId(Long eventId) {
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new CustomException("Booking page not found with id: " + eventId));
-        return EventDto.builder()
-                .eventId(event.getEventId())
-                .eventTitle(event.getEventTitle())
-                .start(event.getStart())
-                .end(event.getEnd())
-                .build();
     }
     @Override
     public void deleteEvent(Long pageId) {

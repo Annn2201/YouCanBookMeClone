@@ -29,4 +29,8 @@ public class BookingPage {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "calendar_id")
+    private Calendar calendar;
 }

@@ -9,6 +9,12 @@
           crossorigin="anonymous">
     <link rel="icon" type="image/x-icon"
           href="https://static.crozdesk.com/web_app_library/providers/logos/000/002/674/original/youcanbook.me-1669205148-logo.png?1669205148">
+    <style>
+        .square-form .form-label,
+        .square-form .form-control {
+            border-radius: 0;
+        }
+    </style>
 </head>
 <body>
 <div class="vh-100 d-flex justify-content-center align-items-center">
@@ -17,7 +23,7 @@
             <div class="col-12 col-md-8 col-lg-6">
                 <div class="border border-3 border-success"></div>
                 <div class="card bg-white shadow-lg">
-                    <div class="card-body p-5">
+                    <div class="card-body p-5 square-form">
                         <svg xmlns="http://www.w3.org/2000/svg" width="75" height="75" fill="currentColor"
                              class="text-success"
                              viewBox="0 0 16 16">
@@ -39,7 +45,7 @@
                             <h1 class="mb-4 ">Enter Your Personal Information</h1>
                             <div class="mb-3">
                                 <input type="hidden" class="form-control" id="pageId"
-                                        th:value="${event.calendar}">
+                                       th:value="${event.calendar}">
                                 <label for="eventTitle" class="form-label fw-bold">Event Title</label>
                                 <input type="text" class="form-control" id="eventTitle"
                                        th:value="${event.eventTitle}" th:name="eventTitle">
@@ -69,7 +75,6 @@
                                        placeholder="name@example.com">
                             </div>
                             <div class="d-grid">
-<!--                                <input class="btn btn-outline-success" type="submit" value="Confirm Booking"/>-->
                                 <button class="btn btn-outline-success" type="submit" id="send" th:onclick="sendMessage()">Confirm Booking</button>
                             </div>
                         </form>

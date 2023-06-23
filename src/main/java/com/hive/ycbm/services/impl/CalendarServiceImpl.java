@@ -28,8 +28,8 @@ public class CalendarServiceImpl implements CalendarService {
     }
 
     @Override
-    public Calendar findByBookingPage(BookingPage bookingPage) {
-        Calendar calendar = calendarRepository.findByBookingPage(bookingPage).orElseThrow(()
+    public Calendar findById(Long id) {
+        Calendar calendar = calendarRepository.findById(id).orElseThrow(()
                 -> new CustomException("Calendar not found"));
         return calendar;
     }

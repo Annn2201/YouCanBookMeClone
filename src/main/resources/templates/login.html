@@ -10,54 +10,100 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="icon" type="image/x-icon"
           href="https://static.crozdesk.com/web_app_library/providers/logos/000/002/674/original/youcanbook.me-1669205148-logo.png?1669205148">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            margin-top: 50px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header h2 {
+            margin-bottom: 30px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .register-link {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .register-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .forgot-password {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .login-google-btn {
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .login-google-btn i {
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
-    <div class="row col-md-8 offset-md-2">
+    <div class="row">
         <div class="card">
             <div class="card-header">
-                <h2 class="text-center">Login</h2>
-                <div th:if="${param.error}">
-                    <div class="alert alert-info">
-                        Your email or password is wrong!!
-                    </div>
+                <h2>Login</h2>
+                <div th:if="${param.error}" class="alert alert-info">
+                    Your email or password is wrong!!
                 </div>
             </div>
             <div class="card-body">
-                <form
-                        method="post"
-                        role="form"
-                        th:action="@{/login}">
+                <form method="post" role="form" th:action="@{/login}">
                     <div class="form-group mb-3">
                         <label class="form-label">Email</label>
-                        <input
-                                class="form-control"
-                                id="username"
-                                name="username"
-                                placeholder="Enter email"
-                                type="email"
-                        />
+                        <input class="form-control" id="username" name="username" placeholder="Enter email" type="email" required/>
                     </div>
 
                     <div class="form-group mb-3">
                         <label class="form-label">Password</label>
-                        <input
-                                class="form-control"
-                                id="password"
-                                name="password"
-                                placeholder="Enter password"
-                                type="password"
-                        />
-
+                        <input class="form-control" id="password" name="password" placeholder="Enter password" type="password" required/>
                     </div>
+
                     <div class="form-group">
                         <button class="btn btn-primary" type="submit">Login</button>
-                        <span>Already registered? <a th:href="@{/register}">Click here to register</a></span>
-                        <a th:href="@{/forget-password}">Forget your password ?</a>
+                        <span class="register-link">Already registered? <a th:href="@{/register}">Click here to register</a></span>
+                        <a class="forgot-password" th:href="@{/forget-password}">Forget your password ?</a>
                     </div>
 
                     <div>
-                        <a class="btn btn-danger" th:href="@{/login/google}">
+                        <a class="btn btn-danger login-google-btn" th:href="@{/login/google}">
                             <i class="fa fa-google fa-fw"></i>Login with Google
                         </a>
                     </div>

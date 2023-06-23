@@ -16,4 +16,5 @@ public class BookingPageDto {
     private String intro;
     @Column(unique = true)
     private  String bookingLink;
+    private Calendar calendar;
 }

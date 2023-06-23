@@ -10,5 +10,4 @@ public class CalendarDto {
     private Long calendarId;
     private String name;
     private String calendarEmail;
-    private BookingPage bookingPage;
 }

@@ -7,9 +7,9 @@ spring:
   application:
     name: INE4
   datasource:
-    url: jdbc:mariadb://192.168.1.143:3306/ycbm
+    url: jdbc:mariadb://192.168.3.185:13307/ycbm
     username: root
-    password: 1e3q2wadS
+    password: 123456
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MariaDBDialect

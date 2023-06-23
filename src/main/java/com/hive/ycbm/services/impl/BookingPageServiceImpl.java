@@ -54,7 +54,7 @@ public class BookingPageServiceImpl implements BookingPageService {
     public void saveBookingPage(BookingPage bookingPage, String email, Calendar calendar)  {
         User user = userRepository.findByMainEmail(email).orElseThrow(() -> new CustomException("Email not found"));
         calendar.setCalendarEmail(email);
-        calendar.setBookingPage(bookingPage);
+        bookingPage.setCalendar(calendar);
         bookingPage.setUser(user);
         this.bookingPageRepository.save(bookingPage);
     }

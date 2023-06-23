@@ -30,7 +30,7 @@ public class BookerServiceImpl implements BookerService {
         event.setEventTitle(eventDto.getEventTitle());
         event.setStart(eventDto.getStart());
         event.setEnd(eventDto.getEnd());
-        event.setCalendar(calendarRepository.findByBookingPage(bookingPage).orElse(null));
+        event.setCalendar(calendarRepository.findById(bookingPage.getCalendar().getCalendarId()).orElse(null));
 
         Booker booker = new Booker();
         booker.setFirstName(eventDto.getBooker().getFirstName());

@@ -73,6 +73,89 @@
       font-size: 16px;
       border-radius: 5px;
     }
+
+    .navbar-icon-top .navbar-nav .nav-link > .fa {
+      position: relative;
+      width: 36px;
+      font-size: 24px;
+    }
+
+    .navbar-icon-top .navbar-nav .nav-link > .fa > .badge {
+      font-size: 0.75rem;
+      position: absolute;
+      right: 0;
+      font-family: sans-serif;
+    }
+
+    .navbar-icon-top .navbar-nav .nav-link > .fa {
+      top: 3px;
+      line-height: 12px;
+    }
+
+    .navbar-icon-top .navbar-nav .nav-link > .fa > .badge {
+      top: -10px;
+    }
+
+    .dropdown-toggle::after {
+      display: none;
+    }
+
+    body {
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      margin-top: 20px;
+    }
+
+    .modal-title {
+      color: #333;
+    }
+
+    .table {
+      background-color: #fff;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+      background-color: #0069d9;
+      border-color: #0062cc;
+    }
+
+    .btn-success {
+      background-color: #28a745;
+      border-color: #28a745;
+    }
+
+    .btn-success:hover {
+      background-color: #218838;
+      border-color: #1e7e34;
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+      border-color: #6c757d;
+    }
+
+    .btn-secondary:hover {
+      background-color: #5a6268;
+      border-color: #545b62;
+    }
+
+    .btn-danger {
+      background-color: #dc3545;
+      border-color: #dc3545;
+    }
+
+    .btn-danger:hover {
+      background-color: #c82333;
+      border-color: #bd2130;
+    }
   </style>
 </head>
 <body>
@@ -162,9 +245,14 @@
 
       <td>
         <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#eventDetailModal"
-           th:onclick="showEventDetail([[${event.eventTitle}]], [[${event.start}]], [[${event.end}]])">Detail Event</a>
-        <a href="#" class="btn btn-primary">Rebook</a>
-        <a th:id="${event.eventId}" class="btn btn-danger delete-btn">Delete</a>
+           th:onclick="showEventDetail([[${event.eventTitle}]],
+                       [[${event.booker.firstName}]],
+                       [[${event.booker.lastName}]],
+                       [[${event.booker.email}]],
+                       [[${event.start}]],
+                       [[${event.end}]])">Detail Event</a>
+        <a th:id="${event.eventId}" class="btn btn-danger delete-btn text-light">Delete</a>
+        <a href="#" class="btn btn-warning">Nap vip</a>
       </td>
     </tr>
     </tbody>
@@ -185,6 +273,18 @@
         <div class="form-group">
           <label for="eventTitle">Event Title:</label>
           <input type="text" class="form-control" id="eventTitle" readonly>
+        </div>
+        <div class="form-group">
+          <label for="eventTitle">Booker First name:</label>
+          <input type="text" class="form-control" id="firstName" readonly>
+        </div>
+        <div class="form-group">
+          <label for="eventTitle">Booker Last name:</label>
+          <input type="text" class="form-control" id="lastName" readonly>
+        </div>
+        <div class="form-group">
+          <label for="eventTitle">Booker email:</label>
+          <input type="text" class="form-control" id="email" readonly>
         </div>
         <div class="form-group">
           <label for="startTime">Start Time:</label>
@@ -236,8 +336,11 @@
   });
 </script>
 <script>
-  function showEventDetail(eventTitle, startTime, endTime) {
+  function showEventDetail(eventTitle, firstName, lastName, email, startTime, endTime) {
     document.getElementById('eventTitle').value = eventTitle;
+    document.getElementById('firstName').value = firstName;
+    document.getElementById('lastName').value = lastName;
+    document.getElementById('email').value = email;
     document.getElementById('startTime').value = startTime;
     document.getElementById('endTime').value = endTime;
   }

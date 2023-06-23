@@ -10,5 +10,4 @@ import java.util.Optional;
 
 @Repository
 public interface CalendarRepository extends JpaRepository<Calendar, Long> {
-    Optional<Calendar> findByBookingPage(BookingPage bookingPage);
 }

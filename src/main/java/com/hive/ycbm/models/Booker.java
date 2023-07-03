@@ -23,8 +23,4 @@ public class Booker {
     @Column(unique = true)
     private String email;
     private Date startTime;
-    @OneToMany
-    @JoinColumn(name = "event_id")
-    private List<Event> events;
-
 }

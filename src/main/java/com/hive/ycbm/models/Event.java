@@ -28,6 +28,4 @@ public class Event {
     @ManyToOne
     @JoinColumn(name = "booker_id")
     private Booker booker;
-    @ManyToMany(mappedBy = "events")
-    private Collection<User> user;
 }

@@ -27,6 +27,9 @@
             <div class="modal-body">
                 <form id="addEventForm" th:action="@{/public/create-event/{pageId}(pageId = ${bookingPage.pageId})}"
                       method="post">
+                    <div>
+                        <input type="hidden" id="pageId" name="pageId" th:value="${pageId}">
+                    </div>
                     <div class="form-group">
                         <label>Event Title</label>
                         <input type="text" name="eventTitle" class="form-control">
@@ -57,18 +60,18 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var dataTest;
-        $.ajax({
-            url: 'http://localhost:8080/api/v1/events',
-            method: 'GET',
-            success: function (data) {
-                console.log("success")
-                console.log(data)
-                dataTest = data
-                dataTest.forEach(function (event) {
-                    calendar.addEvent(event);
-                });
-            }
-        })
+        var pageId = $("#pageId").val();
+            $.ajax({
+                url: 'http://localhost:8080/api/v1/events/' + pageId,
+                method: 'GET',
+                success:
+                    function (data) {
+                    dataTest = data
+                    dataTest.forEach(function (event) {
+                        calendar.addEvent(event);
+                    });
+                }
+            })
 
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl,

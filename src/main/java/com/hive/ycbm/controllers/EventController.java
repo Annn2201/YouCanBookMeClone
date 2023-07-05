@@ -41,10 +41,12 @@ public class EventController {
         model.addAttribute("event", eventDto);
         return "confirm-booking";
     }
-    @GetMapping("/api/v1/events")
+    @GetMapping("/api/v1/events/{pageId}")
     @ResponseBody
-    public List<EventsDto> listAll(){
-        return eventService.getAllEvent();
+    public List<EventsDto> listByCalendar(@PathVariable("pageId") Long pageId){
+        BookingPage bookingPage = bookingPageService.findById(pageId);
+        Calendar calendar = calendarService.findById(bookingPage.getCalendar().getCalendarId());
+        return eventService.getEventsByCalendar(calendar);
     }
 
     @GetMapping("/event-dashboard/{pageId}")

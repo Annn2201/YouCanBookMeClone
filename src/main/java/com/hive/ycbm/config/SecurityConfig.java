@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    private String[] endPoints;
     @Autowired
     private CustomOAuth2UserService customOAuth2UserService;
     @Autowired
@@ -34,14 +35,14 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/login/**").permitAll()
-                .requestMatchers("/register/**").permitAll()
-                .requestMatchers("/js/**").permitAll()
-                .requestMatchers("/forget-password/**").permitAll()
-                .requestMatchers("/reset-password/**").permitAll()
-                .requestMatchers("/public/**").permitAll()
-                .requestMatchers("/create-event").permitAll()
-                .requestMatchers("/confirm").permitAll()
+                .requestMatchers("/login/**",
+                        "/register/**",
+                        "/js/**",
+                        "/forget-password/**",
+                        "/reset-password/**",
+                        "/public/**",
+                        "/create-event",
+                        "/confirm").permitAll()
                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()

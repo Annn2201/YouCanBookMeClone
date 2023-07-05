@@ -5,13 +5,10 @@ import com.hive.ycbm.dto.EventsDto;
 import com.hive.ycbm.exceptions.CustomException;
 import com.hive.ycbm.models.Calendar;
 import com.hive.ycbm.models.Event;
-import com.hive.ycbm.models.User;
-import com.hive.ycbm.repositories.BookerRepository;
+import com.hive.ycbm.repositories.BookingPageRepository;
 import com.hive.ycbm.repositories.EventRepository;
-import com.hive.ycbm.repositories.UserRepository;
 import com.hive.ycbm.services.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,9 +19,7 @@ public class EventServiceImpl implements EventService {
     @Autowired
     private EventRepository eventRepository;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private BookerRepository bookerRepository;
+    private BookingPageRepository bookingPageRepository;
     @Override
     public List<EventDto> getEventByCalendar(Calendar calendar) {
         List<Event> events = eventRepository.findByCalendar(calendar);
@@ -38,12 +33,19 @@ public class EventServiceImpl implements EventService {
                 .build()).collect(Collectors.toList());
     }
     @Override
+    public List<EventsDto> getEventsByCalendar(Calendar calendar) {
+        List<Event> events = eventRepository.findByCalendar(calendar);
+        return events.stream().map(event -> EventsDto.builder().start(event.getStart())
+                .end(event.getEnd())
+                .title(event.getEventTitle())
+                .build()).collect(Collectors.toList());
+    }
+    @Override
     public void deleteEvent(Long pageId) {
         Event event = eventRepository.findById(pageId)
                 .orElseThrow(() -> new CustomException("Booking page not found with id: " + pageId));
         eventRepository.delete(event);
     }
-
     @Override
     public List<EventsDto> getAllEvent() {
         List<Event> events = eventRepository.findAll();

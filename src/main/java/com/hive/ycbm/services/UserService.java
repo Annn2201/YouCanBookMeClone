@@ -2,6 +2,8 @@ package com.hive.ycbm.services;
 
 import com.hive.ycbm.dto.UserDto;
 import com.hive.ycbm.models.User;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.ResponseEntity;
 
 public interface UserService {
     void save(User user);
@@ -16,13 +18,13 @@ public interface UserService {
 
     void update(UserDto userDto);
 
-    UserDto loadCurrentUser();
+    UserDto loadCurrentUser(HttpServletRequest request);
 
     void changePassword(String email, String newPassword);
 
-    boolean checkIfValidOldPassword(String password);
+    boolean checkIfValidOldPassword(String password, HttpServletRequest request);
 
-    String loadCurrentMailEmail();
+    String loadCurrentMailEmail(HttpServletRequest request);
 
     void updateResetPasswordToken(String token, String email);
 

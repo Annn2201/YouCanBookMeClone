@@ -1,4 +1,5 @@
 package com.hive.ycbm.dto;
+
 import com.hive.ycbm.models.Role;
 import lombok.*;
 
@@ -6,18 +7,11 @@ import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class UserDto {
-    private Long userId;
-    private String firstName;
-    private String lastName;
+public class LoginDto {
     private String mainEmail;
-    private String phone;
-    private String organization;
     private String password;
-    private String resetPasswordToken;
     private List<Role> roles;
-
 }

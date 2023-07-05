@@ -17,17 +17,12 @@ import java.util.stream.Collectors;
 public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
-
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) {
         User user = userRepository.findByMainEmail(usernameOrEmail).orElse(null);
         if (user == null) {
             throw new CustomException("Invalid email or password", HttpStatus.NOT_FOUND);
         }
-        return new org.springframework.security.core.userdetails.User(user.getMainEmail(),
-                user.getPassword(),
-                user.getRoles().stream()
-                        .map(role -> new SimpleGrantedAuthority(role.getName()))
-                        .collect(Collectors.toList()));
+        return user;
     }
 }

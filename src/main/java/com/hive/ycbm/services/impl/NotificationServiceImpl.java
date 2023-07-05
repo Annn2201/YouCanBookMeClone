@@ -9,13 +9,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
     private final SimpMessagingTemplate messagingTemplate;
-
     @Override
     public void sendGlobalNotification() {
         String message = "Global Notification";
         messagingTemplate.convertAndSend("/topic/global-notifications", message);
     }
-
     @Override
     public void notifyMessage(String message) {
         sendGlobalNotification();

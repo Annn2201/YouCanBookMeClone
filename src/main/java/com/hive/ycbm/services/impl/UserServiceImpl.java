@@ -1,5 +1,6 @@
 package com.hive.ycbm.services.impl;
 
+import com.hive.ycbm.config.JwtUtilities;
 import com.hive.ycbm.exceptions.CustomException;
 import com.hive.ycbm.models.CustomOAuth2User;
 import com.hive.ycbm.repositories.RoleRepository;
@@ -9,10 +10,10 @@ import com.hive.ycbm.dto.UserDto;
 import com.hive.ycbm.models.Role;
 import com.hive.ycbm.models.User;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,22 +32,21 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+    @Autowired
+    private JwtUtilities jwtUtilities;
     @Autowired
     private JavaMailSender javaMailSender;
-
     @Override
     public void save(User user) {
-        Role role = roleRepository.findByName("ROLE_ADMIN");
+        Role role = roleRepository.findByName("ADMIN");
         if (role == null) {
-            role = roleRepository.save(new Role("ROLE_ADMIN"));
+            role = roleRepository.save(new Role("ADMIN"));
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setConfirmPassword(passwordEncoder.encode(user.getConfirmPassword()));
         user.setRoles(List.of(role));
         userRepository.save(user);
     }
-
     @Override
     public void updateById(Long id) {
         User userUpdate = userRepository.findById(id).orElse(null);
@@ -56,12 +56,10 @@ public class UserServiceImpl implements UserService {
         userUpdate.setOrganization(userUpdate.getOrganization());
         userRepository.save(userUpdate);
     }
-
     @Override
     public void delete(User user) {
         userRepository.deleteById(user.getUserId());
     }
-
     @Override
     public UserDto findById(Long id) {
         User user = userRepository.findById(id).orElse(new User());
@@ -75,7 +73,6 @@ public class UserServiceImpl implements UserService {
                 .resetPasswordToken(user.getResetPasswordToken())
                 .build();
     }
-
     @Override
     public UserDto findByMainEmail(String email) {
         User user = userRepository.findByMainEmail(email).orElse(new User());
@@ -88,9 +85,9 @@ public class UserServiceImpl implements UserService {
                 .organization(user.getOrganization())
                 .password(user.getPassword())
                 .resetPasswordToken(user.getResetPasswordToken())
+                .roles(user.getRoles())
                 .build();
     }
-
     @Override
     public void update(UserDto userDto) {
         User updateUser = userRepository.findByMainEmail(userDto.getMainEmail()).orElse(new User());
@@ -100,44 +97,39 @@ public class UserServiceImpl implements UserService {
         updateUser.setOrganization(userDto.getOrganization());
         userRepository.save(updateUser);
     }
-
     @Override
-    public UserDto loadCurrentUser() {
-        return findByMainEmail(loadCurrentMailEmail());
+    public UserDto loadCurrentUser(HttpServletRequest request) {
+        return findByMainEmail(loadCurrentMailEmail(request));
     }
-
     @Override
-    public String loadCurrentMailEmail() {
+    public String loadCurrentMailEmail(HttpServletRequest request) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String mail = null;
-        if (principal instanceof UserDetails) {
-            mail = ((UserDetails) principal).getUsername();
-        } else if (principal instanceof CustomOAuth2User) {
+        if (principal instanceof CustomOAuth2User) {
             mail = ((CustomOAuth2User) principal).getAttribute("email");
         } else {
-            mail = null;
+            String token = jwtUtilities.extractToken(request);
+            mail = jwtUtilities.extractUsername(token);
         }
         return mail;
     }
-
     @Override
-    public boolean checkIfValidOldPassword(String password) {
-        if (password == "" && loadCurrentUser().getPassword() == null){
+    public boolean checkIfValidOldPassword(String password, HttpServletRequest request) {
+        String email = loadCurrentMailEmail(request);
+        if (password == "" && findByMainEmail(email).getPassword() == null){
             return true;
         }
-        else if (!passwordEncoder.matches(password, loadCurrentUser().getPassword())) {
+        else if (!passwordEncoder.matches(password, loadCurrentUser(request).getPassword())) {
             return false;
         }
         return true;
     }
-
     @Override
     public void changePassword(String email, String newPassword) {
         User userWannaChangePassword = userRepository.findByMainEmail(email).orElse(null);
         userWannaChangePassword.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(userWannaChangePassword);
     }
-
     @Override
     public void updateResetPasswordToken(String token, String email) {
         User user = userRepository.findByMainEmail(email).orElse(null);
@@ -147,7 +139,6 @@ public class UserServiceImpl implements UserService {
         user.setResetPasswordToken(token);
         userRepository.save(user);
     }
-
     @Override
     public UserDto getByResetPasswordToken(String token) {
         User user = userRepository.findByResetPasswordToken(token).orElse(null);
@@ -162,7 +153,6 @@ public class UserServiceImpl implements UserService {
                 .resetPasswordToken(user.getResetPasswordToken())
                 .build();
     }
-
     @Override
     public void sendResetPasswordEmail(String recipientEmail, String link) {
         try {

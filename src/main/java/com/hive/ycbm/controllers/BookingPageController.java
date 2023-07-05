@@ -4,10 +4,10 @@ import com.hive.ycbm.dto.BookingPageDto;
 import com.hive.ycbm.dto.UserDto;
 import com.hive.ycbm.models.BookingPage;
 import com.hive.ycbm.models.Calendar;
-import com.hive.ycbm.models.User;
 import com.hive.ycbm.services.BookingPageService;
 import com.hive.ycbm.services.CalendarService;
 import com.hive.ycbm.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -26,23 +26,25 @@ public class BookingPageController {
     @Autowired
     private CalendarService calendarService;
     @GetMapping("/")
-    public String viewDashBoard(@ModelAttribute("currentUser")UserDto userDto,
-                                @ModelAttribute("bookingPage")BookingPageDto bookingPageDto,
-                                Model model, Long pageId) {
-        String email = userService.loadCurrentMailEmail();
-        List<BookingPageDto> bookingPage = bookingPageService.getBookingPagesByUser(email);
-        model.addAttribute("listBookingPage", bookingPage);
+    public String viewDashBoard(@ModelAttribute("bookingPage") BookingPageDto bookingPageDto,
+                                HttpServletRequest request,
+                                Model model) {
+        UserDto currentUser = userService.loadCurrentUser(request);
+        String username = userService.loadCurrentMailEmail(request);
+        List<BookingPageDto> bookingPages= bookingPageService.getBookingPagesByUser(username);
+        model.addAttribute("listBookingPage", bookingPages);
+        model.addAttribute("currentUser", currentUser);
         return "homepage";
     }
     @PostMapping("/booking-page")
     public String saveBookingPage(BookingPage bookingPage,
+                                  HttpServletRequest request,
                                   Model model) {
-        String emailUser = userService.loadCurrentMailEmail();
+        String username = userService.loadCurrentMailEmail(request);
         Calendar calendar = new Calendar();
-        calendar.setCalendarEmail(emailUser);
+        calendar.setCalendarEmail(username);
         calendarService.save(calendar);
-        bookingPageService.saveBookingPage(bookingPage,emailUser,calendar);
-        model.addAttribute("bookingPage", bookingPage);
+        bookingPageService.saveBookingPage(bookingPage,username,calendar);
         return "redirect:/admin/";
     }
     @GetMapping("/booking-page/{pageId}")

@@ -1,21 +1,14 @@
 package com.hive.ycbm.controllers;
-import com.hive.ycbm.dto.ResetPasswordDto;
+import com.hive.ycbm.config.JwtUtilities;
 import com.hive.ycbm.dto.UpdatePasswordDTO;
 import com.hive.ycbm.services.UserService;
 import com.hive.ycbm.dto.UserDto;
-import com.hive.ycbm.models.User;
-import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.UnsupportedEncodingException;
 
 @Controller
 @RequestMapping("/admin")
@@ -24,20 +17,20 @@ public class UserController {
     private UserService userService;
     @Autowired
     private JavaMailSender mailSender;
-
+    @Autowired
+    private JwtUtilities jwtUtilities;
     @GetMapping("/user")
-    public String showEditPage(Model model) {
-        UserDto currentUser = userService.loadCurrentUser();
+    public String showEditPage(Model model,
+                               HttpServletRequest request) {
+        UserDto currentUser = userService.loadCurrentUser(request);
         model.addAttribute("currentUser", currentUser);
         return "user";
     }
-
     @PostMapping("/user")
     public String editProfile(@ModelAttribute("currentUser") UserDto userDto) {
         userService.update(userDto);
         return "redirect:/admin/user?success";
     }
-
     @GetMapping("/update-password")
     public String showUpdataPasswordPage(@ModelAttribute("currentUser") UserDto userDto,
                                          Model model) {
@@ -46,11 +39,12 @@ public class UserController {
     @PostMapping("/update-password")
     public String updatePassword(@ModelAttribute("currentUser") UserDto userDto,
                                  UpdatePasswordDTO updatePasswordDTO,
+                                 HttpServletRequest request,
                                  Model model) {
-        if (!userService.checkIfValidOldPassword(updatePasswordDTO.getPassword())) {
+        if (!userService.checkIfValidOldPassword(updatePasswordDTO.getPassword(), request)) {
             return "redirect:/admin/update-password?invalid";
         }
-        userService.changePassword(userService.loadCurrentMailEmail(), updatePasswordDTO.getNewPassword());
+        userService.changePassword(userService.loadCurrentMailEmail(request), updatePasswordDTO.getNewPassword());
         return "redirect:/admin/update-password?success";
     }
 }

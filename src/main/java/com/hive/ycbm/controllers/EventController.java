@@ -5,7 +5,6 @@ import com.hive.ycbm.dto.EventDto;
 import com.hive.ycbm.dto.UserDto;
 import com.hive.ycbm.models.BookingPage;
 import com.hive.ycbm.models.Calendar;
-import com.hive.ycbm.models.Event;
 import com.hive.ycbm.services.*;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -59,10 +58,12 @@ public class EventController {
     }
     @PostMapping("/public/confirm/{pageId}")
     public String confirmEvent(@PathVariable(value = "pageId") Long pageId,
-                               @ModelAttribute("event") EventDto eventDto) throws MessagingException {
+                               @ModelAttribute("event") EventDto eventDto,
+                               HttpServletRequest request) {
+        UserDto currentUser = userService.loadCurrentUser(request);
         BookingPage bookingPage = bookingPageService.findById(pageId);
         bookerService.createBooker(eventDto, bookingPage);
-        mailService.sendMail(userService.loadCurrentUser(), eventDto);
+        mailService.sendMail(currentUser, eventDto);
         return "redirect:/public/success/";
     }
     @GetMapping("/public/success/")

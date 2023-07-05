@@ -21,12 +21,10 @@ import java.util.List;
 public class CalendarServiceImpl implements CalendarService {
     private final EventRepository eventRepository;
     private final CalendarRepository calendarRepository;
-
     @Override
     public void save(Calendar calendar) {
         calendarRepository.save(calendar);
     }
-
     @Override
     public Calendar findById(Long id) {
         Calendar calendar = calendarRepository.findById(id).orElseThrow(()

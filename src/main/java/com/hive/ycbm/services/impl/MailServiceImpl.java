@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 public class MailServiceImpl implements MailService {
     private final JavaMailSender mailSender;
     private final SpringTemplateEngine templateEngine;
-
     @Override
     public void sendMail(UserDto userDto, EventDto eventDto) {
         Context context = new Context();

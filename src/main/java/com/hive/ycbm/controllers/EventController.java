@@ -2,6 +2,7 @@ package com.hive.ycbm.controllers;
 
 import com.hive.ycbm.dto.BookingPageDto;
 import com.hive.ycbm.dto.EventDto;
+import com.hive.ycbm.dto.EventsDto;
 import com.hive.ycbm.dto.UserDto;
 import com.hive.ycbm.models.BookingPage;
 import com.hive.ycbm.models.Calendar;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -39,6 +41,12 @@ public class EventController {
         model.addAttribute("event", eventDto);
         return "confirm-booking";
     }
+    @GetMapping("/api/v1/events")
+    @ResponseBody
+    public List<EventsDto> listAll(){
+        return eventService.getAllEvent();
+    }
+
     @GetMapping("/event-dashboard/{pageId}")
     public String viewEventDashBoard(@ModelAttribute("currentUser") UserDto userDto,
                                      @PathVariable("pageId") Long pageId,
@@ -75,5 +83,8 @@ public class EventController {
         this.eventService.deleteEvent(pageId);
         return ResponseEntity.ok().build();
     }
+
+
+
 }
 

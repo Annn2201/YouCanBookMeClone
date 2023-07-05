@@ -1,6 +1,7 @@
 package com.hive.ycbm.services.impl;
 
 import com.hive.ycbm.dto.EventDto;
+import com.hive.ycbm.dto.EventsDto;
 import com.hive.ycbm.exceptions.CustomException;
 import com.hive.ycbm.models.Calendar;
 import com.hive.ycbm.models.Event;
@@ -41,6 +42,17 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(pageId)
                 .orElseThrow(() -> new CustomException("Booking page not found with id: " + pageId));
         eventRepository.delete(event);
+    }
+
+    @Override
+    public List<EventsDto> getAllEvent() {
+        List<Event> events = eventRepository.findAll();
+        return events.stream().map(event -> EventsDto.builder()
+                .title(event.getEventTitle())
+                .start(event.getStart())
+                .end(event.getEnd())
+                .build()
+        ).collect(Collectors.toList());
     }
 }
 

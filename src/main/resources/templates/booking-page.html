@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <title>Calendar</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css">
     <link rel="icon" type="image/x-icon"
           href="https://static.crozdesk.com/web_app_library/providers/logos/000/002/674/original/youcanbook.me-1669205148-logo.png?1669205148">
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.js"></script>
 </head>
 <body>
 <div class="container">
@@ -26,21 +25,28 @@
                 <h4 class="modal-title">Add Event</h4>
             </div>
             <div class="modal-body">
-                <form id="addEventForm" th:action="@{/public/create-event/{pageId}(pageId = ${bookingPage.pageId})}" method="post">
+                <form id="addEventForm" th:action="@{/public/create-event/{pageId}(pageId = ${bookingPage.pageId})}"
+                      method="post">
                     <div class="form-group">
-                        <label>Title:</label>
+                        <label>Event Title</label>
                         <input type="text" name="eventTitle" class="form-control">
                     </div>
-                    <div class="form-group">
-                        <label>Start Date:</label>
-                        <input type="text" name="start" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>End Date:</label>
-                        <input type="text" name="end" class="form-control">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="start">Start Date</label>
+                                <input type="datetime-local" name="start" id="start" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="end">End Date</label>
+                                <input type="datetime-local" name="end" id="end" class="form-control">
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
-                        <input type="submit" class="btn btn-primary" value="Add"/>
+                        <input type="submit" class="btn btn-primary" value="Add Event"/>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </form>
@@ -49,25 +55,54 @@
     </div>
 </div>
 <script>
-    $(document).ready(function() {
-        $('#calendar').fullCalendar({
-            header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay'
-            },
-            selectable: true,
-            selectHelper: true,
-            editable: false,
-            eventSources: [
-            ],
-            select: function(start, end) {
-                $('#addEventForm input[name="start"]').val(moment(start).format('YYYY-MM-DD HH:mm:ss'));
-                $('#addEventForm input[name="end"]').val(moment(end).format('YYYY-MM-DD HH:mm:ss'));
-                $('#addEventModal').modal('show');
-                $('#calendar').fullCalendar('unselect');
-            },
-        });
+    document.addEventListener('DOMContentLoaded', function () {
+        var dataTest;
+        $.ajax({
+            url: 'http://localhost:8080/api/v1/events',
+            method: 'GET',
+            success: function (data) {
+                console.log("success")
+                console.log(data)
+                dataTest = data
+                dataTest.forEach(function (event) {
+                    calendar.addEvent(event);
+                });
+            }
+        })
+
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl,
+            {
+                initialView: 'dayGridMonth',
+                initialView: 'timeGridWeek',
+                initialView: 'timeGridDay',
+                initialView: 'listWeek',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                },
+
+                selectable: true,
+                editable: false,
+                nowIndicator: true,
+                navLinks: true,
+                weekends: true,
+                selectMirror: true,
+                events: dataTest,
+                eventColor: '#a941e1',
+
+                selectAllow: function (selectInfo) {
+                    return moment().diff(selectInfo.start) <= 0;
+                },
+
+                select: function (event) {
+                    $('#addEventForm input[name="start"]').val(moment(event.start).format('YYYY-MM-DD HH:mm:ss'));
+                    $('#addEventForm input[name="end"]').val(moment(event.end).format('YYYY-MM-DD HH:mm:ss'));
+                    $('#addEventModal').modal('show');
+                },
+            });
+        calendar.render();
     });
 </script>
 </body>

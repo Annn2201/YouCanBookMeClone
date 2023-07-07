@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
     private JwtUtilities jwtUtilities;
     @Autowired
     private JavaMailSender javaMailSender;
+
     @Override
     public void save(User user) {
         Role role = roleRepository.findByName("ROLE_ADMIN");
@@ -47,6 +48,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(List.of(role));
         userRepository.save(user);
     }
+
     @Override
     public void updateById(Long id) {
         User userUpdate = userRepository.findById(id).orElse(null);
@@ -56,10 +58,12 @@ public class UserServiceImpl implements UserService {
         userUpdate.setOrganization(userUpdate.getOrganization());
         userRepository.save(userUpdate);
     }
+
     @Override
     public void delete(User user) {
         userRepository.deleteById(user.getUserId());
     }
+
     @Override
     public UserDto findById(Long id) {
         User user = userRepository.findById(id).orElse(new User());
@@ -73,6 +77,7 @@ public class UserServiceImpl implements UserService {
                 .resetPasswordToken(user.getResetPasswordToken())
                 .build();
     }
+
     @Override
     public UserDto findByMainEmail(String email) {
         User user = userRepository.findByMainEmail(email).orElse(new User());
@@ -85,9 +90,11 @@ public class UserServiceImpl implements UserService {
                 .organization(user.getOrganization())
                 .password(user.getPassword())
                 .resetPasswordToken(user.getResetPasswordToken())
+                .accessToken(user.getAccessToken())
                 .roles(user.getRoles())
                 .build();
     }
+
     @Override
     public void update(UserDto userDto) {
         User updateUser = userRepository.findByMainEmail(userDto.getMainEmail()).orElse(new User());
@@ -97,39 +104,36 @@ public class UserServiceImpl implements UserService {
         updateUser.setOrganization(userDto.getOrganization());
         userRepository.save(updateUser);
     }
+
     @Override
     public UserDto loadCurrentUser(HttpServletRequest request) {
         return findByMainEmail(loadCurrentMailEmail(request));
     }
+
     @Override
     public String loadCurrentMailEmail(HttpServletRequest request) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String mail = null;
-        if (principal instanceof CustomOAuth2User) {
-            mail = ((CustomOAuth2User) principal).getAttribute("email");
-        } else {
-            String token = jwtUtilities.extractToken(request);
-            mail = jwtUtilities.extractUsername(token);
-        }
-        return mail;
+        String token = jwtUtilities.extractToken(request);
+        return jwtUtilities.extractUsername(token);
     }
+
     @Override
     public boolean checkIfValidOldPassword(String password, HttpServletRequest request) {
         String email = loadCurrentMailEmail(request);
-        if (password == "" && findByMainEmail(email).getPassword() == null){
+        if (password == "" && findByMainEmail(email).getPassword() == null) {
             return true;
-        }
-        else if (!passwordEncoder.matches(password, loadCurrentUser(request).getPassword())) {
+        } else if (!passwordEncoder.matches(password, loadCurrentUser(request).getPassword())) {
             return false;
         }
         return true;
     }
+
     @Override
     public void changePassword(String email, String newPassword) {
         User userWannaChangePassword = userRepository.findByMainEmail(email).orElse(null);
         userWannaChangePassword.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(userWannaChangePassword);
     }
+
     @Override
     public void updateResetPasswordToken(String token, String email) {
         User user = userRepository.findByMainEmail(email).orElse(null);
@@ -139,6 +143,7 @@ public class UserServiceImpl implements UserService {
         user.setResetPasswordToken(token);
         userRepository.save(user);
     }
+
     @Override
     public UserDto getByResetPasswordToken(String token) {
         User user = userRepository.findByResetPasswordToken(token).orElse(null);
@@ -153,6 +158,7 @@ public class UserServiceImpl implements UserService {
                 .resetPasswordToken(user.getResetPasswordToken())
                 .build();
     }
+
     @Override
     public void sendResetPasswordEmail(String recipientEmail, String link) {
         try {
@@ -174,5 +180,12 @@ public class UserServiceImpl implements UserService {
         } catch (MessagingException | UnsupportedEncodingException e) {
             throw new CustomException("Error with MineMessage", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Override
+    public void saveAccessToken(String token, String email) {
+        User user = userRepository.findByMainEmail(email).orElse(null);
+        user.setAccessToken(token);
+        userRepository.save(user);
     }
 }

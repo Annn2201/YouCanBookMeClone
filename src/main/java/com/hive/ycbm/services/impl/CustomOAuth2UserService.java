@@ -23,19 +23,24 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
+        String accessToken = userRequest.getAccessToken().getTokenValue();
         String email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("name");
         Optional<User> userOptional = userRepository.findByMainEmail(email);
         User user;
         if (userOptional.isPresent()) {
             user = userOptional.get();
+            user.setAccessToken(accessToken);
+            userRepository.save(user);
         } else {
             user = new User();
             user.setMainEmail(email);
             user.setFirstName(name);
+            user.setAccessToken(accessToken);
             Role role = roleRepository.findByName("ROLE_ADMIN");
             if (role == null) {
                 role = roleRepository.save(new Role("ROLE_ADMIN"));

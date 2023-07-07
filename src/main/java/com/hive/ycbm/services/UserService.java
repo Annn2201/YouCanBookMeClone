@@ -31,4 +31,6 @@ public interface UserService {
     void sendResetPasswordEmail(String recipientEmail, String link);
 
     UserDto getByResetPasswordToken(String token);
+
+    void saveAccessToken(String token, String email);
 }

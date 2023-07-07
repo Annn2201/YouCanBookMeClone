@@ -44,6 +44,7 @@ public class SecurityConfig {
                         "/public/**",
                         "/create-event",
                         "/confirm").permitAll()
+                .requestMatchers("/info/**").hasAnyRole("ADMIN")
                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()

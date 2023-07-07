@@ -6,7 +6,6 @@ import com.hive.ycbm.dto.ResetPasswordDto;
 import com.hive.ycbm.dto.UserDto;
 import com.hive.ycbm.models.Role;
 import com.hive.ycbm.models.User;
-import com.hive.ycbm.services.BookingPageService;
 import com.hive.ycbm.services.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,7 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -48,7 +46,7 @@ public class LoginController {
         Cookie jwtCookie = new Cookie("jwt", jwtToken);
         response.addCookie(jwtCookie);
         model.addAttribute("currentUser", loginUser);
-        return "redirect:/admin/";
+        return "redirect:/info/";
     }
     @GetMapping("/register")
     public String showRegisterPage(Model model) {

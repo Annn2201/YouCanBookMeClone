@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
     public String handlerCustomException(CustomException e, Model model) {
         ErrorResponse errorResponse = new ErrorResponse(e.getHttpStatus().value(), e.getMessage(), new Date());
         ResponseEntity.status(e.getHttpStatus().value()).body(errorResponse);
-        log.warn("Checked exception " + e.getMessage());
+        log.warn(e.getMessage());
         model.addAttribute("status", errorResponse.getStatus());
         return "error";
     }
@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
     public String handlerException(Exception e, Model model) {
         ErrorResponse errorResponse = new ErrorResponse(500, e.getMessage(), new Date());
         ResponseEntity.status(500).body(errorResponse);
-        log.error("Unknown exception " + e.getMessage());
+        log.error(e.getMessage());
         model.addAttribute("status", errorResponse.getStatus());
         return "error";
     }

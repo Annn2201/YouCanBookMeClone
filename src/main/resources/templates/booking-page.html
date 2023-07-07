@@ -69,18 +69,29 @@
     document.addEventListener('DOMContentLoaded', function () {
         var dataTest;
         var pageId = $("#pageId").val();
-            $.ajax({
-                url: 'http://localhost:8080/api/v1/events/' + pageId,
-                method: 'GET',
-                success:
-                    function (data) {
+        $.ajax({
+            url: 'http://localhost:8080/api/v1/events/' + pageId,
+            method: 'GET',
+            success:
+                function (data) {
                     dataTest = data
                     dataTest.forEach(function (event) {
                         calendar.addEvent(event);
                     });
                 }
-            })
-
+        })
+        $.ajax({
+            url: 'http://localhost:8080/api/v1/google-events/' + pageId,
+            method: 'GET',
+            success:
+                function (data) {
+                    dataTest = data;
+                    dataTest.forEach(function (event) {
+                        event.title = event.eventTitle;
+                        calendar.addEvent(event);
+                    });
+                }
+        });
         var calendarEl = document.getElementById('calendar');
         var timezoneSelectorEl = document.getElementById('timezone-selector');
         var calendar = new FullCalendar.Calendar(calendarEl,

@@ -1,59 +1,61 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YouCanBookMe</title>
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-          crossorigin="anonymous">
 </head>
 <body>
-<div class="vh-100 d-flex justify-content-center align-items-center">
-    <div class="container">
-        <div class="row d-flex justify-content-center">
-            <div class="col-12 col-md-8 col-lg-6">
-                <div class="border border-3 border-primary"></div>
-                <div class="card bg-white shadow-lg">
-                    <div class="card-body p-5">
-                        <div class="mb-3">
-                            <h5 class="fw-bold mb-3 ">YouCanBookMe</h5>
-                            <p class="mb-3 " th:text="${'Hi ' + firstName + ','}"></p>
-                            <p class="mb-3 " th:text="${'Thanks for scheduling a meeting.'}"></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="card bg-white shadow-lg">
-                    <div class="card-body p-5">
-                        <div class="mb-3">
-                            <h5 class="fw-bold mb-3 ">Details</h5>
-                            <p class="mb-3 " th:text="${'Booking Page: ' + title}"></p>
-                            <p class="mb-3 " th:text="${'Start: ' + start}"></p>
-                            <p class="mb-3 " th:text="${'End: ' + end}"></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="card bg-white shadow-lg">
-                    <div class="card-body p-5">
-                        <div class="mb-3">
-                            <h5 class="fw-bold mb-3 ">Booking Form</h5>
-                            <p class="mb-3 " th:text="${'First name: ' + firstName}"></p>
-                            <p class="mb-3 " th:text="${'Last name: ' + lastName}"></p>
-                            <p class="mb-3 " th:text="${'Email: ' + email}"></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="card bg-white shadow-lg">
-                    <div class="card-body p-5">
-                        <div class="mb-3">
-                            <p><a href="#">Click here to reschedule this booking</a></p>
-                            <p><a href="#">Click here to cancel this booking</a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div style="font-family: 'Roboto', sans-serif;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+            <td align="center" valign="top">
+                <table cellpadding="0" cellspacing="0" border="0" style="max-width: 600px;">
+                    <tr>
+                        <td>
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td align="center" bgcolor="#3CB371" style="padding: 20px; border-radius: 4px;">
+                                        <h2 style="margin: 0; font-weight: bold; color: #fff;">YouCanBookMe</h2>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td bgcolor="#ffffff" style="padding: 20px; border-radius: 4px;">
+                                        <p th:text="${'Hi ' + firstName + ','}" style="margin: 0;"></p>
+                                        <p th:text="${'Thanks for scheduling a meeting.'}" style="margin: 0;"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td bgcolor="#ffffff" style="padding: 20px; border-radius: 4px;">
+                                        <h4 style="margin: 0; font-weight: bold;">Details</h4>
+                                        <p th:text="${'Booking Page: ' + title}" style="margin: 0;"></p>
+                                        <p th:text="${'Start: ' + start}" style="margin: 0;"></p>
+                                        <p th:text="${'End: ' + end}" style="margin: 0;"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td bgcolor="#ffffff" style="padding: 20px; border-radius: 4px;">
+                                        <h4 style="margin: 0; font-weight: bold;">Booking Form</h4>
+                                        <p th:text="${'First name: ' + firstName}" style="margin: 0;"></p>
+                                        <p th:text="${'Last name: ' + lastName}" style="margin: 0;"></p>
+                                        <p th:text="${'Email: ' + email}" style="margin: 0;"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td bgcolor="#ffffff" style="padding: 20px; border-radius: 4px;">
+                                        <p style="margin: 0;"><a href="#" style="color: #000000;text-decoration: none">Click here to reschedule this booking</a></p>
+                                        <p style="margin: 0;"><a href="#" style="color: #000000;text-decoration: none">Click here to cancel this booking</a></p>
+                                        <p style="margin: 0;"><a href="#" style="color: #000000;text-decoration: none">Manage this booking</a></p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 </div>
 </body>
 </html>

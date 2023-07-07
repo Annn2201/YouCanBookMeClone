@@ -38,9 +38,9 @@ public class UserServiceImpl implements UserService {
     private JavaMailSender javaMailSender;
     @Override
     public void save(User user) {
-        Role role = roleRepository.findByName("ADMIN");
+        Role role = roleRepository.findByName("ROLE_ADMIN");
         if (role == null) {
-            role = roleRepository.save(new Role("ADMIN"));
+            role = roleRepository.save(new Role("ROLE_ADMIN"));
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setConfirmPassword(passwordEncoder.encode(user.getConfirmPassword()));

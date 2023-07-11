@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Calendar</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/3.4.1/lumen/bootstrap.min.css">
     <link rel="icon" type="image/x-icon"
           href="https://static.crozdesk.com/web_app_library/providers/logos/000/002/674/original/youcanbook.me-1669205148-logo.png?1669205148">
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -13,6 +14,13 @@
 </head>
 <body>
 <div class="container">
+    <select id="timezone-selector">
+        <option value="local">Local</option>
+        <option value="UTC">UTC</option>
+        <option value="America/New_York">New York</option>
+        <option value="Europe/London">London</option>
+        <option value="Asia/Tokyo">Tokyo</option>
+    </select>
     <h1>Calendar</h1>
     <div id="calendar">
     </div>
@@ -74,6 +82,7 @@
             })
 
         var calendarEl = document.getElementById('calendar');
+        var timezoneSelectorEl = document.getElementById('timezone-selector');
         var calendar = new FullCalendar.Calendar(calendarEl,
             {
                 initialView: 'dayGridMonth',
@@ -86,17 +95,47 @@
                     right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
                 },
 
+                themeSystem: 'lumen',
                 selectable: true,
+                timeZone: timezoneSelectorEl.value,
                 editable: false,
                 nowIndicator: true,
                 navLinks: true,
-                weekends: true,
                 selectMirror: true,
                 events: dataTest,
                 eventColor: '#a941e1',
 
+                businessHours: {
+                    // days of week. an array of zero-based day of week integers (0=Sunday)
+                    daysOfWeek: [ 1, 2, 3, 4, 5], // Monday - Thursday
+
+                    startTime: '07:00',
+                    endTime: '20:00',
+                },
+
+                views: {
+                dayGridMonth: { // name of view
+                    titleFormat: { year: 'numeric', month: '2-digit', day: '2-digit' }
+                    // other view-specific options here
+                }
+            },
+                moreLinkClick: 'popover',
+                dayMaxEventRows: true,
+                views: {
+                    timeGrid: {
+                        dayMaxEventRows: 3
+                    }
+                },
+
                 selectAllow: function (selectInfo) {
-                    return moment().diff(selectInfo.start) <= 0;
+
+                    var isFuture = moment().diff(selectInfo.start) <= 0;
+
+                    var dayOfWeek = selectInfo.start.getDay(); // lấy ngày trong tuần (0 = Chủ Nhật, 6 = Thứ Bảy)
+                    var startHour = selectInfo.start.getHours(); // lấy giờ bắt đầu
+                    var endHour = selectInfo.end.getHours(); // lấy giờ kết thúc
+
+                    return dayOfWeek >= 1 && dayOfWeek <= 5 && startHour >= 7 && endHour <= 20 && isFuture;
                 },
 
                 select: function (event) {
@@ -106,6 +145,10 @@
                 },
             });
         calendar.render();
+
+        timezoneSelectorEl.addEventListener('change', function() {
+            calendar.setOption('timeZone', this.value);
+        });
     });
 </script>
 </body>

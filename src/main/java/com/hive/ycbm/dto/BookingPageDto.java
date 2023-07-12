@@ -1,5 +1,6 @@
 package com.hive.ycbm.dto;
 import com.hive.ycbm.models.Calendar;
+import com.hive.ycbm.models.User;
 import jakarta.persistence.Column;
 import lombok.*;
 
@@ -17,4 +18,5 @@ public class BookingPageDto {
     @Column(unique = true)
     private  String bookingLink;
     private Calendar calendar;
+    private User user;
 }

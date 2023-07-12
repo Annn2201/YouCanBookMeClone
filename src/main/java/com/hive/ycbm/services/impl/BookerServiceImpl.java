@@ -10,6 +10,9 @@ import com.hive.ycbm.repositories.EventRepository;
 import com.hive.ycbm.repositories.UserRepository;
 import com.hive.ycbm.services.BookerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -25,7 +28,8 @@ public class BookerServiceImpl implements BookerService {
     private CalendarRepository calendarRepository;
 
     @Override
-    public void createBooker(EventDto eventDto, BookingPage bookingPage) {
+    @CacheEvict(value = "events", allEntries = true)
+    public EventDto createBooker(EventDto eventDto, BookingPage bookingPage) {
         Event event = new Event();
         event.setEventTitle(eventDto.getEventTitle());
         event.setStart(eventDto.getStart());
@@ -38,6 +42,7 @@ public class BookerServiceImpl implements BookerService {
         bookerRepository.save(booker);
         event.setBooker(booker);
         eventRepository.save(event);
+        return eventDto;
     }
 
 }

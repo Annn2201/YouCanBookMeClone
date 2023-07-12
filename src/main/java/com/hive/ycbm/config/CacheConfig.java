@@ -18,7 +18,9 @@ public class CacheConfig {
         cacheManager.setCaches(Arrays.asList(
                 new ConcurrentMapCache("users"),
                 new ConcurrentMapCache("events"),
-                new ConcurrentMapCache("bookingPages")));
+                new ConcurrentMapCache("bookingPages"),
+                new ConcurrentMapCache("calendars"),
+                new ConcurrentMapCache("events")));
         return cacheManager;
     }
 }

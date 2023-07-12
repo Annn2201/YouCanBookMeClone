@@ -7,5 +7,5 @@ import com.hive.ycbm.models.BookingPage;
 import com.hive.ycbm.models.Calendar;
 
 public interface BookerService {
-    void createBooker(EventDto eventDto, BookingPage bookingPage);
+    EventDto createBooker(EventDto eventDto, BookingPage bookingPage);
 }

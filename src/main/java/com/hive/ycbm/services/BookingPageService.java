@@ -12,7 +12,7 @@ public interface BookingPageService {
     List<BookingPageDto> getBookingPagesByUser(String email);
     BookingPage findById(Long pageId);
     BookingPageDto getBookingPageById(Long pageId);
-    void saveBookingPage(BookingPage bookingPage, String email, Calendar calendar);
-    void updateBookingPage(BookingPageDto bookingPageDto);
+    BookingPageDto saveBookingPage(BookingPage bookingPage, String email, Calendar calendar);
+    BookingPageDto updateBookingPage(BookingPageDto bookingPageDto);
     void deleteBookingPage(Long pageId);
 }

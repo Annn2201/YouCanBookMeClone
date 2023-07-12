@@ -9,6 +9,7 @@ import com.hive.ycbm.repositories.BookingPageRepository;
 import com.hive.ycbm.repositories.UserRepository;
 import com.hive.ycbm.services.BookingPageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,6 @@ public class BookingPageServiceImpl implements BookingPageService {
                 .build()).collect(Collectors.toList());
     }
     @Override
-    @Cacheable(value = "bookingPages")
     public BookingPage findById(Long pageId) {
         BookingPage bookingPage = bookingPageRepository.findById(pageId)
                 .orElseThrow(() -> new CustomException("Booking page not found with id: " + pageId));
@@ -54,21 +54,31 @@ public class BookingPageServiceImpl implements BookingPageService {
                 .build();
     }
     @Override
-    public void saveBookingPage(BookingPage bookingPage, String email, Calendar calendar)  {
+    @CacheEvict(value = "bookingPages", allEntries = true)
+    public BookingPageDto saveBookingPage(BookingPage bookingPage, String email, Calendar calendar)  {
         User user = userRepository.findByMainEmail(email).orElseThrow(() -> new CustomException("Email not found"));
         calendar.setCalendarEmail(email);
         bookingPage.setCalendar(calendar);
         bookingPage.setUser(user);
         this.bookingPageRepository.save(bookingPage);
+        return BookingPageDto.builder()
+                .pageId(bookingPage.getPageId())
+                .title(bookingPage.getTitle())
+                .bookingLink(bookingPage.getBookingLink())
+                .calendar(bookingPage.getCalendar())
+                .user(bookingPage.getUser())
+                .build();
     }
     @Override
-    public void updateBookingPage(BookingPageDto bookingPageDto) {
+    @CacheEvict(value = "bookingPages", allEntries = true)
+    public BookingPageDto updateBookingPage(BookingPageDto bookingPageDto) {
         BookingPage updateBookingPage = bookingPageRepository.findById(bookingPageDto.getPageId())
                 .orElseThrow(() -> new CustomException("Booking page not found with id: " + bookingPageDto.getPageId(),
                         HttpStatus.NOT_FOUND));
         updateBookingPage.setTitle(bookingPageDto.getTitle());
         updateBookingPage.setBookingLink(bookingPageDto.getBookingLink());
         bookingPageRepository.save(updateBookingPage);
+        return bookingPageDto;
     }
     @Override
     public void deleteBookingPage(Long pageId) {

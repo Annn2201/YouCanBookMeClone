@@ -137,9 +137,9 @@ public class GoogleCalendarService {
     }
 
     private EventDateTime changeFormat(LocalDateTime time) {
-        DateTime dateTime = DateTime.parseRfc3339(time.toInstant(ZoneOffset.UTC).toString());
+        DateTime dateTime = DateTime.parseRfc3339(time.atOffset(ZoneOffset.ofHours(7)).toInstant().toString());
         return new EventDateTime()
                 .setDateTime(dateTime)
-                .setTimeZone("GMT");
+                .setTimeZone("Asia/Ho_Chi_Minh");
     }
 }

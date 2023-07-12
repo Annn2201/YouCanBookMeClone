@@ -11,5 +11,4 @@ public interface EventService {
     List<EventDto> getEventByCalendar(Calendar calendar);
     List<EventsDto> getEventsByCalendar(Calendar calendar);
     void deleteEvent(Long eventId);
-    List<EventsDto> getAllEvent();
 }

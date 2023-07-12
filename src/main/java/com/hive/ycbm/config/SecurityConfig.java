@@ -1,6 +1,7 @@
 package com.hive.ycbm.config;
 
 import com.hive.ycbm.services.impl.CustomOAuth2UserService;
+import com.hive.ycbm.services.impl.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +20,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private String[] endPoints;
     @Autowired
-    private CustomOAuth2UserService customOAuth2UserService;
+    private JwtUtilities jwtUtilities;
     @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+    @Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
+
     private JwtAuthenticationFilter jwtAuthenticationFilter;
     @Bean
     public static PasswordEncoder passwordEncoder() {
@@ -56,6 +61,7 @@ public class SecurityConfig {
                         .successHandler(oAuth2AuthenticationSuccessHandler()))
                 .logout(logout -> logout.permitAll()
                         .deleteCookies("jwt"));
+        jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtUtilities, customUserDetailsService);
         http.addFilterAt(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

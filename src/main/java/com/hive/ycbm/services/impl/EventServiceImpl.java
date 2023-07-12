@@ -9,6 +9,7 @@ import com.hive.ycbm.repositories.BookingPageRepository;
 import com.hive.ycbm.repositories.EventRepository;
 import com.hive.ycbm.services.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class EventServiceImpl implements EventService {
     @Autowired
     private BookingPageRepository bookingPageRepository;
     @Override
+    @Cacheable(value = "events")
     public List<EventDto> getEventByCalendar(Calendar calendar) {
         List<Event> events = eventRepository.findByCalendar(calendar);
         return events.stream().map(event -> EventDto.builder()
@@ -33,6 +35,7 @@ public class EventServiceImpl implements EventService {
                 .build()).collect(Collectors.toList());
     }
     @Override
+    @Cacheable(value = "events")
     public List<EventsDto> getEventsByCalendar(Calendar calendar) {
         List<Event> events = eventRepository.findByCalendar(calendar);
         return events.stream().map(event -> EventsDto.builder().start(event.getStart())
@@ -45,16 +48,6 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(pageId)
                 .orElseThrow(() -> new CustomException("Booking page not found with id: " + pageId));
         eventRepository.delete(event);
-    }
-    @Override
-    public List<EventsDto> getAllEvent() {
-        List<Event> events = eventRepository.findAll();
-        return events.stream().map(event -> EventsDto.builder()
-                .title(event.getEventTitle())
-                .start(event.getStart())
-                .end(event.getEnd())
-                .build()
-        ).collect(Collectors.toList());
     }
 }
 

@@ -9,6 +9,7 @@ import com.hive.ycbm.repositories.BookingPageRepository;
 import com.hive.ycbm.repositories.UserRepository;
 import com.hive.ycbm.services.BookingPageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ public class BookingPageServiceImpl implements BookingPageService {
     private UserRepository userRepository;
 
     @Override
+    @Cacheable(value = "bookingPages")
     public List<BookingPageDto> getBookingPagesByUser(String email) {
         User user = userRepository.findByMainEmail(email).orElseThrow(null);
         List<BookingPage> bookingPages = bookingPageRepository.findByUser(user);
@@ -34,12 +36,14 @@ public class BookingPageServiceImpl implements BookingPageService {
                 .build()).collect(Collectors.toList());
     }
     @Override
+    @Cacheable(value = "bookingPages")
     public BookingPage findById(Long pageId) {
         BookingPage bookingPage = bookingPageRepository.findById(pageId)
                 .orElseThrow(() -> new CustomException("Booking page not found with id: " + pageId));
         return bookingPage;
     }
     @Override
+    @Cacheable(value = "bookingPages")
     public BookingPageDto getBookingPageById(Long pageId) {
         BookingPage bookingPage = bookingPageRepository.findById(pageId)
                 .orElseThrow(() -> new CustomException("Booking page not found with id: " + pageId));

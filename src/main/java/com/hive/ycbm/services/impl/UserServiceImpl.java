@@ -12,6 +12,7 @@ import com.hive.ycbm.models.User;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -48,37 +49,13 @@ public class UserServiceImpl implements UserService {
         user.setRoles(List.of(role));
         userRepository.save(user);
     }
-
-    @Override
-    public void updateById(Long id) {
-        User userUpdate = userRepository.findById(id).orElse(null);
-        userUpdate.setFirstName(userUpdate.getFirstName());
-        userUpdate.setLastName(userUpdate.getLastName());
-        userUpdate.setPhone(userUpdate.getPhone());
-        userUpdate.setOrganization(userUpdate.getOrganization());
-        userRepository.save(userUpdate);
-    }
-
     @Override
     public void delete(User user) {
         userRepository.deleteById(user.getUserId());
     }
 
     @Override
-    public UserDto findById(Long id) {
-        User user = userRepository.findById(id).orElse(new User());
-        return UserDto.builder()
-                .userId(user.getUserId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .mainEmail(user.getMainEmail())
-                .phone(user.getPhone())
-                .organization(user.getOrganization())
-                .resetPasswordToken(user.getResetPasswordToken())
-                .build();
-    }
-
-    @Override
+    @Cacheable(value = "users")
     public UserDto findByMainEmail(String email) {
         User user = userRepository.findByMainEmail(email).orElse(new User());
         return UserDto.builder()
@@ -106,6 +83,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "users")
     public UserDto loadCurrentUser(HttpServletRequest request) {
         return findByMainEmail(loadCurrentMailEmail(request));
     }
@@ -145,6 +123,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "users")
     public UserDto getByResetPasswordToken(String token) {
         User user = userRepository.findByResetPasswordToken(token).orElse(null);
         return UserDto.builder()

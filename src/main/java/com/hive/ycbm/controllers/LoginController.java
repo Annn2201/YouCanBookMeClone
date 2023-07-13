@@ -19,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Controller
 public class LoginController {
@@ -90,9 +91,9 @@ public class LoginController {
         String token = RandomStringUtils.random(30);
         String siteURL = request.getRequestURL().toString();
         String newSiteURL = siteURL.replace(request.getRequestURI(), "").toString();
-        userService.updateResetPasswordToken(token, email);
+        CompletableFuture.runAsync(() -> userService.updateResetPasswordToken(token, email));
         String resetPasswordLink = newSiteURL + "/reset-password?token=" + token;
-        userService.sendResetPasswordEmail(email, resetPasswordLink);
+        CompletableFuture.runAsync(() -> userService.sendResetPasswordEmail(email, resetPasswordLink));
         return "redirect:/forget-password?success";
     }
     @GetMapping("/reset-password")

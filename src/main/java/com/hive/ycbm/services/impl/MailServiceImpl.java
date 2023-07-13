@@ -16,6 +16,7 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -32,9 +33,9 @@ public class MailServiceImpl implements MailService {
         context.setVariable("start", eventDto.getStart());
         context.setVariable("end", eventDto.getEnd());
         String mailBooker = templateEngine.process("mail-booker.html", context);
-        createMail(eventDto.getBooker().getEmail(), "Your meeting with " + userDto.getFirstName(), mailBooker);
+        CompletableFuture.runAsync(() -> createMail(eventDto.getBooker().getEmail(), "Your meeting with " + userDto.getFirstName(), mailBooker));
         String mailUser = templateEngine.process("mail-user.html", context);
-        createMail(userDto.getMainEmail(), "New meeting scheduled with " + eventDto.getBooker().getFirstName(), mailUser);
+        CompletableFuture.runAsync(() -> createMail(userDto.getMainEmail(), "New meeting scheduled with " + eventDto.getBooker().getFirstName(), mailUser));
     }
 
     public void createMail(String to, String subject, String html)  {

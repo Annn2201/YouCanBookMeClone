@@ -35,6 +35,7 @@ public class User implements Serializable, UserDetails {
     private String organization;
     private String resetPasswordToken;
     private String accessToken;
+    private String refreshToken;
     public User (String mainEmail , String password , List<Role> roles) {
         this.mainEmail= mainEmail;
         this.password=password;

@@ -55,7 +55,7 @@ public class GoogleCalendarService {
                 "&service=lso&o2v=2&flowName=GeneralOAuthFlow";
     }
 
-    public String exchangeCodeForAccessToken(String code) {
+    public String exchangeCodeForRefreshToken(String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
@@ -76,9 +76,35 @@ public class GoogleCalendarService {
         );
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             Map<String, String> responseMap = responseEntity.getBody();
+            return responseMap.get("refresh_token");
+        } else {
+            throw new RuntimeException("Failed to exchange code for refresh token");
+        }
+    }
+
+    public String refreshAccessToken(String refreshToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+        requestBody.add("client_id", clientId);
+        requestBody.add("client_secret", clientSecret);
+        requestBody.add("refresh_token", refreshToken);
+        requestBody.add("grant_type", "refresh_token");
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
+        RestTemplate restTemplate = new RestTemplate();
+        String tokenUrl = "https://www.googleapis.com/oauth2/v4/token";
+        ResponseEntity<Map<String, String>> responseEntity = restTemplate.exchange(
+                tokenUrl,
+                HttpMethod.POST,
+                requestEntity,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            Map<String, String> responseMap = responseEntity.getBody();
             return responseMap.get("access_token");
         } else {
-            throw new RuntimeException("Failed to exchange code for access token");
+            throw new RuntimeException("Failed to refresh access token");
         }
     }
 

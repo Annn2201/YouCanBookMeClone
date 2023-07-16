@@ -19,6 +19,6 @@ public class UserDto {
     private String password;
     private String resetPasswordToken;
     private String accessToken;
+    private String refreshToken;
     private List<Role> roles;
-
 }

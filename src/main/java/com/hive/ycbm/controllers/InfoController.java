@@ -1,5 +1,6 @@
 package com.hive.ycbm.controllers;
 
+import com.hive.ycbm.dto.UserDto;
 import com.hive.ycbm.services.UserService;
 import com.hive.ycbm.services.impl.GoogleCalendarService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,8 +18,15 @@ public class InfoController {
     private final GoogleCalendarService googleCalendarService;
 
     @GetMapping("/")
-    public String checkInfo() {
-        return "connect-calendar";
+    public String checkInfo(HttpServletRequest request) {
+        UserDto userDto = userService.loadCurrentUser(request);
+        if (userDto.getRefreshToken() == null) {
+            return "connect-calendar";
+        } else {
+            String accessToken = googleCalendarService.refreshAccessToken(userDto.getRefreshToken());
+            userService.saveAccessToken(accessToken, userDto.getMainEmail());
+            return "redirect:/admin/";
+        }
     }
 
     @GetMapping("/oauth2")
@@ -29,8 +37,9 @@ public class InfoController {
 
     @GetMapping("/oauth2/google")
     public String handleGoogleCallback(@RequestParam("code") String code, HttpServletRequest request) {
-        String accessToken = googleCalendarService.exchangeCodeForAccessToken(code);
-        userService.saveAccessToken(accessToken, userService.loadCurrentMailEmail(request));
+        UserDto userDto = userService.loadCurrentUser(request);
+        String refreshToken = googleCalendarService.exchangeCodeForRefreshToken(code);
+        userService.saveRefreshToken(refreshToken, userDto.getMainEmail());
         return "redirect:/admin/";
     }
 }

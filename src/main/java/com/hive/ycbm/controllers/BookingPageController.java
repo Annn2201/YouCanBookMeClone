@@ -7,6 +7,7 @@ import com.hive.ycbm.models.Calendar;
 import com.hive.ycbm.services.BookingPageService;
 import com.hive.ycbm.services.CalendarService;
 import com.hive.ycbm.services.UserService;
+import com.hive.ycbm.services.impl.GoogleCalendarService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +26,18 @@ public class BookingPageController {
     private UserService userService;
     @Autowired
     private CalendarService calendarService;
+    @Autowired
+    private GoogleCalendarService googleCalendarService;
     @GetMapping("/")
     public String viewDashBoard(@ModelAttribute("bookingPage") BookingPageDto bookingPageDto,
                                 HttpServletRequest request,
                                 Model model) {
         UserDto currentUser = userService.loadCurrentUser(request);
         String username = userService.loadCurrentMailEmail(request);
+        if (currentUser.getAccessToken() == null){
+            String accessToken = googleCalendarService.refreshAccessToken(currentUser.getRefreshToken());
+            userService.saveAccessToken(accessToken, username);
+        }
         List<BookingPageDto> bookingPages= bookingPageService.getBookingPagesByUser(username);
         model.addAttribute("listBookingPage", bookingPages);
         model.addAttribute("currentUser", currentUser);

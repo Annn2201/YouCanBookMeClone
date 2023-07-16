@@ -68,6 +68,7 @@ public class UserServiceImpl implements UserService {
                 .password(user.getPassword())
                 .resetPasswordToken(user.getResetPasswordToken())
                 .accessToken(user.getAccessToken())
+                .refreshToken(user.getRefreshToken())
                 .roles(user.getRoles())
                 .build();
     }
@@ -165,6 +166,13 @@ public class UserServiceImpl implements UserService {
     public void saveAccessToken(String token, String email) {
         User user = userRepository.findByMainEmail(email).orElse(null);
         user.setAccessToken(token);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void saveRefreshToken(String token, String email) {
+        User user = userRepository.findByMainEmail(email).orElse(null);
+        user.setRefreshToken(token);
         userRepository.save(user);
     }
 }

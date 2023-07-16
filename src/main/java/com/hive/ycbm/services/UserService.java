@@ -29,4 +29,5 @@ public interface UserService {
     UserDto getByResetPasswordToken(String token);
 
     void saveAccessToken(String token, String email);
+    void saveRefreshToken(String token, String email);
 }

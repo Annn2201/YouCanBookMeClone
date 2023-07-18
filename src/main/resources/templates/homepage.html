@@ -53,6 +53,14 @@
       margin-top: 20px;
     }
 
+    .content {
+      border-bottom-style: solid;
+      border-bottom-color: #329685;
+      border-top-style: solid;
+      border-top-color: #329685;
+
+    }
+
     .modal-title {
       color: #333;
     }
@@ -99,6 +107,41 @@
     .btn-danger:hover {
       background-color: #c82333;
       border-color: #bd2130;
+    }
+    .navbar-icon-top .navbar-nav .nav-link > .fa {
+      position: relative;
+      width: 36px;
+      font-size: 24px;
+    }
+
+    .navbar-icon-top .navbar-nav .nav-link > .fa > .badge {
+      font-size: 0.75rem;
+      position: absolute;
+      right: 0;
+      font-family: sans-serif;
+    }
+
+    .navbar-icon-top .navbar-nav .nav-link > .fa {
+      top: 3px;
+      line-height: 12px;
+    }
+
+    .navbar-icon-top .navbar-nav .nav-link > .fa > .badge {
+      top: -10px;
+    }
+
+    .dropdown-toggle::after {
+      display: none;
+    }
+
+    li {
+      list-style-type: none;
+      text-align: center;
+    }
+    li:hover {
+      background-color: #329685;
+      border-radius: 5px;
+      color: #f0f0f0;
     }
   </style>
 </head>
@@ -153,30 +196,32 @@
 </nav>
 
 <div class="container">
-  <h1>Booking Dashboard</h1>
-  <button class="btn btn-primary" data-toggle="modal" data-target="#createBookingModal">Create Booking Page</button>
-  <hr>
-  <h2>Booking Pages</h2>
-  <table class="table">
-    <thead>
-    <tr>
-      <th>Title</th>
-      <th>Booking Link</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="bookingPage : ${listBookingPage}">
-      <td th:text="${bookingPage.title}"></td>
-      <td><a th:href="@{/public/event/{pageId}(pageId=${bookingPage.pageId})}" target="_blank" th:text="${bookingPage.bookingLink + '.ycbm'}"></a></td>
-      <td>
-        <a th:href="@{/event-dashboard/{id}(id=${bookingPage.pageId})}" class="btn btn-primary text-light">View Event</a>
-        <a th:href="@{/admin/booking-page/{id}(id=${bookingPage.pageId})}" class="btn btn-primary text-light">Edit</a>
-        <a th:id="${bookingPage.pageId}" class="btn btn-danger delete-btn text-light">Delete</a>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+  <div class="content">
+    <h1>Booking Dashboard</h1>
+    <button class="btn btn-info" data-toggle="modal" data-target="#createBookingModal">Create Booking Page</button>
+    <hr>
+    <h2>Booking Pages</h2>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Title</th>
+        <th>Booking Link</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="bookingPage : ${listBookingPage}">
+        <td th:text="${bookingPage.title}"></td>
+        <td><a th:href="@{/public/event/{pageId}(pageId=${bookingPage.pageId})}" target="_blank" th:text="${bookingPage.bookingLink + '.ycbm'}"></a></td>
+        <td>
+          <a th:href="@{/event-dashboard/{id}(id=${bookingPage.pageId})}" class="btn btn-info text-light">View Event</a>
+          <a th:href="@{/admin/booking-page/{id}(id=${bookingPage.pageId})}" class="btn btn-info text-light">Edit</a>
+          <a th:id="${bookingPage.pageId}" class="btn btn-danger delete-btn text-light">Delete</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <div id="createBookingModal" class="modal fade" role="dialog">

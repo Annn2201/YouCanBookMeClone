@@ -39,67 +39,6 @@
       display: none;
     }
 
-    .modal-title {
-      color: #333;
-      font-weight: bold;
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-
-    .modal-body .form-group label {
-      font-weight: bold;
-      font-size: 18px;
-      color: #555;
-      margin-bottom: 10px;
-    }
-
-    .modal-body .form-control {
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      padding: 10px;
-    }
-
-    .modal-footer {
-      border-top: none;
-      padding: 15px 0;
-      text-align: right;
-    }
-
-    .modal-footer .btn-secondary {
-      background-color: #ccc;
-      color: #fff;
-      border: none;
-      padding: 8px 20px;
-      font-size: 16px;
-      border-radius: 5px;
-    }
-
-    .navbar-icon-top .navbar-nav .nav-link > .fa {
-      position: relative;
-      width: 36px;
-      font-size: 24px;
-    }
-
-    .navbar-icon-top .navbar-nav .nav-link > .fa > .badge {
-      font-size: 0.75rem;
-      position: absolute;
-      right: 0;
-      font-family: sans-serif;
-    }
-
-    .navbar-icon-top .navbar-nav .nav-link > .fa {
-      top: 3px;
-      line-height: 12px;
-    }
-
-    .navbar-icon-top .navbar-nav .nav-link > .fa > .badge {
-      top: -10px;
-    }
-
-    .dropdown-toggle::after {
-      display: none;
-    }
-
     body {
       background-color: #f8f9fa;
       font-family: Arial, sans-serif;
@@ -107,6 +46,14 @@
 
     .container {
       margin-top: 20px;
+    }
+
+    .content {
+      border-bottom-style: solid;
+      border-bottom-color: #329685;
+      border-top-style: solid;
+      border-top-color: #329685;
+
     }
 
     .modal-title {
@@ -155,6 +102,41 @@
     .btn-danger:hover {
       background-color: #c82333;
       border-color: #bd2130;
+    }
+    .navbar-icon-top .navbar-nav .nav-link > .fa {
+      position: relative;
+      width: 36px;
+      font-size: 24px;
+    }
+
+    .navbar-icon-top .navbar-nav .nav-link > .fa > .badge {
+      font-size: 0.75rem;
+      position: absolute;
+      right: 0;
+      font-family: sans-serif;
+    }
+
+    .navbar-icon-top .navbar-nav .nav-link > .fa {
+      top: 3px;
+      line-height: 12px;
+    }
+
+    .navbar-icon-top .navbar-nav .nav-link > .fa > .badge {
+      top: -10px;
+    }
+
+    .dropdown-toggle::after {
+      display: none;
+    }
+
+    li {
+      list-style-type: none;
+      text-align: center;
+    }
+    li:hover {
+      background-color: #329685;
+      border-radius: 5px;
+      color: #f0f0f0;
     }
   </style>
 </head>
@@ -214,49 +196,51 @@
 </nav>
 
 <div class="container">
-  <h1>Event Dashboard</h1>
-  <div th:if="${param.error}">
-    <div class="alert alert-danger">
-      No event has been created!!!
+  <div class="content">
+    <h1>Event Dashboard</h1>
+    <div th:if="${param.error}">
+      <div class="alert alert-danger">
+        No event has been created!!!
+      </div>
     </div>
+    <form th:action="@{/public/event/{pageId}(pageId=${bookingPage.pageId})}" target="_blank" th:object="${listEvent}">
+      <button class="btn btn-info" type="submit"  data-toggle="modal" data-target="#createBookingModal">View Calendar</button>
+    </form>
+
+    <hr>
+    <h2>Event</h2>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Event Title</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+  <!--      <th>Booking</th>-->
+  <!--      <th>Booking Link</th>-->
+        <th>...</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="event : ${listEvent}">
+        <td th:text="${event.eventTitle}"></td>
+        <td th:text="${event.start}"></td>
+        <td th:text="${event.end}"></td>
+
+        <td>
+          <a href="#" class="btn btn-info" data-toggle="modal" data-target="#eventDetailModal"
+             th:onclick="showEventDetail([[${event.eventTitle}]],
+                         [[${event.booker.firstName}]],
+                         [[${event.booker.lastName}]],
+                         [[${event.booker.email}]],
+                         [[${event.start}]],
+                         [[${event.end}]])">Detail Event</a>
+          <a th:id="${event.eventId}" class="btn btn-danger delete-btn text-light">Delete</a>
+          <a href="#" class="btn btn-warning">Nap vip</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
   </div>
-  <form th:action="@{/public/event/{pageId}(pageId=${bookingPage.pageId})}" target="_blank" th:object="${listEvent}">
-    <button class="btn btn-primary" type="submit"  data-toggle="modal" data-target="#createBookingModal">View Calendar</button>
-  </form>
-
-  <hr>
-  <h2>Event</h2>
-  <table class="table">
-    <thead>
-    <tr>
-      <th>Event Title</th>
-      <th>Start Time</th>
-      <th>End Time</th>
-<!--      <th>Booking</th>-->
-<!--      <th>Booking Link</th>-->
-      <th>...</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="event : ${listEvent}">
-      <td th:text="${event.eventTitle}"></td>
-      <td th:text="${event.start}"></td>
-      <td th:text="${event.end}"></td>
-
-      <td>
-        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#eventDetailModal"
-           th:onclick="showEventDetail([[${event.eventTitle}]],
-                       [[${event.booker.firstName}]],
-                       [[${event.booker.lastName}]],
-                       [[${event.booker.email}]],
-                       [[${event.start}]],
-                       [[${event.end}]])">Detail Event</a>
-        <a th:id="${event.eventId}" class="btn btn-danger delete-btn text-light">Delete</a>
-        <a href="#" class="btn btn-warning">Nap vip</a>
-      </td>
-    </tr>
-    </tbody>
-  </table>
 </div>
 <!-- Modal for Event Detail -->
 <div class="modal fade" id="eventDetailModal" tabindex="-1" role="dialog" aria-labelledby="eventDetailModalLabel"

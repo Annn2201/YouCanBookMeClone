@@ -39,6 +39,35 @@
     .dropdown-toggle::after {
       display: none;
     }
+
+    .option {
+      padding: 5px;
+      background-color: #f8f9fa;
+    }
+    li {
+      list-style-type: none;
+      text-align: center;
+    }
+    li:hover {
+      background-color: #329685;
+      border-radius: 5px;
+      color: #f0f0f0;
+    }
+
+    .col-lg-9 {
+      border-radius: 5px;
+      border: thin solid #329685;
+      padding: 15px;
+      background-color: #f8f9fa;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -101,7 +130,7 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-3">
-        <ul>
+        <ul class="option">
           <li><a id="accountOverview" th:href="@{/admin/user}">Account Overview</a></li>
           <li><a id="updatePassword" th:href="@{/admin/update-password}">Update Password</a></li>
         </ul>

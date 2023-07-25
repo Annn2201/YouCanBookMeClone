@@ -133,6 +133,45 @@
       border-radius: 5px;
       color: #f0f0f0;
     }
+    form {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    #keyword {
+      flex: 0.605;
+      border: 2px solid #ccc;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 16px;
+      transition: border-color 0.2s ease-in-out;
+    }
+
+    #keyword:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
+
+    input[type="submit"] {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    form > * {
+      margin-right: 10px;
+    }
   </style>
 </head>
 <body>
@@ -191,6 +230,11 @@
     <button class="btn btn-info" data-toggle="modal" data-target="#createBookingModal">Create Booking Page</button>
     <hr>
     <h2>Booking Pages</h2>
+    <form th:action="@{/admin/}">
+      <input type="text" name="keyword" id="keyword" size="50" placeholder="Search..."
+                     th:value="${keyword}"/>
+      <input type="submit" value="Find" />
+    </form>
     <table class="table">
       <thead>
       <tr>

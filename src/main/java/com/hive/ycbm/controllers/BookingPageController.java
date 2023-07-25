@@ -10,6 +10,7 @@ import com.hive.ycbm.services.UserService;
 import com.hive.ycbm.services.impl.GoogleCalendarService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +31,7 @@ public class BookingPageController {
     private GoogleCalendarService googleCalendarService;
     @GetMapping("/")
     public String viewDashBoard(@ModelAttribute("bookingPage") BookingPageDto bookingPageDto,
+                                @Param("keyword") String keyword,
                                 HttpServletRequest request,
                                 Model model) {
         UserDto currentUser = userService.loadCurrentUser(request);
@@ -38,7 +40,7 @@ public class BookingPageController {
             String accessToken = googleCalendarService.refreshAccessToken(currentUser.getRefreshToken());
             userService.saveAccessToken(accessToken, username);
         }
-        List<BookingPageDto> bookingPages= bookingPageService.getBookingPagesByUser(username);
+        List<BookingPageDto> bookingPages= bookingPageService.getBookingPagesByUser(username, keyword);
         model.addAttribute("listBookingPage", bookingPages);
         model.addAttribute("currentUser", currentUser);
         return "homepage";

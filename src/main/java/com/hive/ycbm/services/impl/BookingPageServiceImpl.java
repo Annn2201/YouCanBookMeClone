@@ -8,9 +8,11 @@ import com.hive.ycbm.models.User;
 import com.hive.ycbm.repositories.BookingPageRepository;
 import com.hive.ycbm.repositories.UserRepository;
 import com.hive.ycbm.services.BookingPageService;
+import com.hive.ycbm.specifications.BookingPageSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -27,21 +29,29 @@ public class BookingPageServiceImpl implements BookingPageService {
 
     @Override
     @Cacheable(value = "bookingPages")
-    public List<BookingPageDto> getBookingPagesByUser(String email) {
+    public List<BookingPageDto> getBookingPagesByUser(String email, String keyword) {
         User user = userRepository.findByMainEmail(email).orElseThrow(null);
-        List<BookingPage> bookingPages = bookingPageRepository.findByUser(user);
+        List<BookingPage> bookingPages;
+        if (keyword != null) {
+            Specification<BookingPage> specification = BookingPageSpecification.withNameAndLike(keyword, user.getUserId());
+            bookingPages = bookingPageRepository.findAll(specification);
+        } else {
+            bookingPages = bookingPageRepository.findByUser(user);
+        }
         return bookingPages.stream().map(bookingPage -> BookingPageDto.builder()
                 .pageId(bookingPage.getPageId())
                 .title(bookingPage.getTitle())
                 .bookingLink(bookingPage.getBookingLink())
                 .build()).collect(Collectors.toList());
     }
+
     @Override
     public BookingPage findById(Long pageId) {
         BookingPage bookingPage = bookingPageRepository.findById(pageId)
                 .orElseThrow(() -> new CustomException("Booking page not found with id: " + pageId));
         return bookingPage;
     }
+
     @Override
     @Cacheable(value = "bookingPages")
     public BookingPageDto getBookingPageById(Long pageId) {
@@ -53,9 +63,10 @@ public class BookingPageServiceImpl implements BookingPageService {
                 .bookingLink(bookingPage.getBookingLink())
                 .build();
     }
+
     @Override
     @CacheEvict(value = "bookingPages", allEntries = true)
-    public BookingPageDto saveBookingPage(BookingPage bookingPage, String email, Calendar calendar)  {
+    public BookingPageDto saveBookingPage(BookingPage bookingPage, String email, Calendar calendar) {
         User user = userRepository.findByMainEmail(email).orElseThrow(() -> new CustomException("Email not found"));
         calendar.setCalendarEmail(email);
         bookingPage.setCalendar(calendar);
@@ -69,6 +80,7 @@ public class BookingPageServiceImpl implements BookingPageService {
                 .user(bookingPage.getUser())
                 .build();
     }
+
     @Override
     @CacheEvict(value = "bookingPages", allEntries = true)
     public BookingPageDto updateBookingPage(BookingPageDto bookingPageDto) {
@@ -80,6 +92,7 @@ public class BookingPageServiceImpl implements BookingPageService {
         bookingPageRepository.save(updateBookingPage);
         return bookingPageDto;
     }
+
     @Override
     public void deleteBookingPage(Long pageId) {
         BookingPage bookingPage = bookingPageRepository.findById(pageId)

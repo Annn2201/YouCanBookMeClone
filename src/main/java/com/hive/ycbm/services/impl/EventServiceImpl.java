@@ -8,8 +8,10 @@ import com.hive.ycbm.models.Event;
 import com.hive.ycbm.repositories.BookingPageRepository;
 import com.hive.ycbm.repositories.EventRepository;
 import com.hive.ycbm.services.EventService;
+import com.hive.ycbm.specifications.EventSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,10 +23,17 @@ public class EventServiceImpl implements EventService {
     private EventRepository eventRepository;
     @Autowired
     private BookingPageRepository bookingPageRepository;
+
     @Override
     @Cacheable(value = "events")
-    public List<EventDto> getEventByCalendar(Calendar calendar) {
-        List<Event> events = eventRepository.findByCalendar(calendar);
+    public List<EventDto> getEventByCalendar(Calendar calendar, String keyword) {
+        List<Event> events;
+        if (keyword != null) {
+            Specification<Event> specification = EventSpecification.withName(keyword, calendar.getCalendarId());
+            events = eventRepository.findAll(specification);
+        } else {
+            events = eventRepository.findByCalendar(calendar);
+        }
         return events.stream().map(event -> EventDto.builder()
                 .eventId(event.getEventId())
                 .eventTitle(event.getEventTitle())
@@ -34,6 +43,7 @@ public class EventServiceImpl implements EventService {
                 .calendar(event.getCalendar())
                 .build()).collect(Collectors.toList());
     }
+
     @Override
     @Cacheable(value = "events")
     public List<EventsDto> getEventsByCalendar(Calendar calendar) {
@@ -43,6 +53,7 @@ public class EventServiceImpl implements EventService {
                 .title(event.getEventTitle())
                 .build()).collect(Collectors.toList());
     }
+
     @Override
     public void deleteEvent(Long pageId) {
         Event event = eventRepository.findById(pageId)

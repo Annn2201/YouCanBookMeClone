@@ -10,6 +10,7 @@ import com.hive.ycbm.services.*;
 import com.hive.ycbm.services.impl.GoogleCalendarService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,10 +55,11 @@ public class EventController {
     @GetMapping("/event-dashboard/{pageId}")
     public String viewEventDashBoard(@ModelAttribute("currentUser") UserDto userDto,
                                      @PathVariable("pageId") Long pageId,
+                                     @Param("keyword") String keyword,
                                      Model model) {
         BookingPage bookingPage = bookingPageService.findById(pageId);
         Calendar calendar = calendarService.findById(bookingPage.getCalendar().getCalendarId());
-        List<EventDto> listEventDto = eventService.getEventByCalendar(calendar);
+        List<EventDto> listEventDto = eventService.getEventByCalendar(calendar, keyword);
         model.addAttribute("listEvent", listEventDto);
         model.addAttribute("bookingPage", bookingPage);
         return "event-dashboard";

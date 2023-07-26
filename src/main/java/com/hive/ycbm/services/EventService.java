@@ -8,7 +8,7 @@ import com.hive.ycbm.models.Event;
 import java.util.List;
 
 public interface EventService {
-    List<EventDto> getEventByCalendar(Calendar calendar, String keyword);
+    List<EventDto> getEventByCalendar(Calendar calendar, String keyword, Integer days);
     List<EventsDto> getEventsByCalendar(Calendar calendar);
     void deleteEvent(Long eventId);
 }

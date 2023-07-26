@@ -159,7 +159,7 @@
       box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
     }
 
-    input[type="submit"] {
+    button[type="submit"] {
       background-color: #007bff;
       color: #fff;
       border: none;
@@ -170,13 +170,22 @@
       transition: background-color 0.2s ease-in-out;
     }
 
-    input[type="submit"]:hover {
+    button[type="submit"]:hover {
       background-color: #0056b3;
     }
 
     form > * {
       margin-right: 10px;
     }
+    #choice {
+      height: 45px;
+      font-size: 14px;
+      padding: 5px;
+      border-radius: 4px;
+      width: 150px;
+      overflow: hidden;
+    }
+
   </style>
 </head>
 <body>
@@ -251,7 +260,16 @@
     <form th:action="@{/event-dashboard/{pageId}(pageId=${bookingPage.pageId})}">
       <input type="text" name="keyword" id="keyword" size="50" placeholder="Search..."
              th:value="${keyword}"/>
-      <input type="submit" value="Find"/>
+
+      <select name="days" id="choice">
+        <option value="0" th:selected="${days == 0}">None</option>
+        <option value="7" th:selected="${days == 7}">Last 7 days</option>
+        <option value="30" th:selected="${days == 30}">Last 30 days</option>
+        <option value="90" th:selected="${days == 90}">Last 90 days</option>
+        <option value="365" th:selected="${days == 365}">Last 365 days</option>
+      </select>
+
+      <button type="submit" onclick="preserveSelection()">Find</button>
     </form>
     <table class="table">
       <thead>
@@ -369,6 +387,19 @@
     document.getElementById('startTime').value = startTime;
     document.getElementById('endTime').value = endTime;
   }
+  function preserveSelection() {
+    const choiceSelect = document.getElementById("choice");
+    const selectedValue = choiceSelect.value;
+    localStorage.setItem("selectedChoice", selectedValue);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const choiceSelect = document.getElementById("choice");
+    const storedValue = localStorage.getItem("selectedChoice");
+    if (storedValue !== null) {
+      choiceSelect.value = storedValue;
+    }
+  });
 </script>
 
 </body>

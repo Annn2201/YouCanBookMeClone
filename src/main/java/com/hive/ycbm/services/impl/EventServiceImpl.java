@@ -14,6 +14,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,14 +28,28 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Cacheable(value = "events")
-    public List<EventDto> getEventByCalendar(Calendar calendar, String keyword) {
+    public List<EventDto> getEventByCalendar(Calendar calendar, String keyword, Integer days) {
         List<Event> events;
-        if (keyword != null) {
+        LocalDateTime endTime = LocalDateTime.now();
+        LocalDateTime startTime = null;
+
+        if (days != null && days > 0) {
+            startTime = endTime.minus(days, ChronoUnit.DAYS);
+        }
+
+        if (startTime != null && keyword != null) {
+            Specification<Event> specification = EventSpecification.withTimeFilterAndName(startTime, endTime, keyword, calendar.getCalendarId());
+            events = eventRepository.findAll(specification);
+        } else if (startTime != null) {
+            Specification<Event> specification = EventSpecification.withTimeFilter(startTime, endTime, calendar.getCalendarId());
+            events = eventRepository.findAll(specification);
+        } else if (keyword != null) {
             Specification<Event> specification = EventSpecification.withName(keyword, calendar.getCalendarId());
             events = eventRepository.findAll(specification);
         } else {
             events = eventRepository.findByCalendar(calendar);
         }
+
         return events.stream().map(event -> EventDto.builder()
                 .eventId(event.getEventId())
                 .eventTitle(event.getEventTitle())

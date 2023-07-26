@@ -55,11 +55,12 @@ public class EventController {
     @GetMapping("/event-dashboard/{pageId}")
     public String viewEventDashBoard(@ModelAttribute("currentUser") UserDto userDto,
                                      @PathVariable("pageId") Long pageId,
-                                     @Param("keyword") String keyword,
+                                     @RequestParam(value = "keyword", required = false) String keyword,
+                                     @RequestParam(value = "days", required = false) Integer days,
                                      Model model) {
         BookingPage bookingPage = bookingPageService.findById(pageId);
         Calendar calendar = calendarService.findById(bookingPage.getCalendar().getCalendarId());
-        List<EventDto> listEventDto = eventService.getEventByCalendar(calendar, keyword);
+        List<EventDto> listEventDto = eventService.getEventByCalendar(calendar, keyword, days);
         model.addAttribute("listEvent", listEventDto);
         model.addAttribute("bookingPage", bookingPage);
         return "event-dashboard";

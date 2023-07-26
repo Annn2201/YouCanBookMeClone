@@ -57,10 +57,12 @@ public class EventController {
                                      @PathVariable("pageId") Long pageId,
                                      @RequestParam(value = "keyword", required = false) String keyword,
                                      @RequestParam(value = "days", required = false) Integer days,
-                                     Model model) {
+                                     Model model,
+                                     HttpServletRequest request) {
         BookingPage bookingPage = bookingPageService.findById(pageId);
         Calendar calendar = calendarService.findById(bookingPage.getCalendar().getCalendarId());
         List<EventDto> listEventDto = eventService.getEventByCalendar(calendar, keyword, days);
+        model.addAttribute("currentUser", userService.loadCurrentUser(request));
         model.addAttribute("listEvent", listEventDto);
         model.addAttribute("bookingPage", bookingPage);
         return "event-dashboard";

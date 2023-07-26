@@ -32,8 +32,10 @@ public class UserController {
         return "redirect:/admin/user?success";
     }
     @GetMapping("/update-password")
-    public String showUpdataPasswordPage(@ModelAttribute("currentUser") UserDto userDto,
-                                         Model model) {
+    public String showUpdatePasswordPage(@ModelAttribute("currentUser") UserDto userDto,
+                                         Model model,
+                                         HttpServletRequest request) {
+        model.addAttribute("currentUser", userService.loadCurrentUser(request));
         return "update-password";
     }
     @PostMapping("/update-password")

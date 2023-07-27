@@ -13,32 +13,6 @@
   <style>
     @import url("//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 
-    .navbar-icon-top .navbar-nav .nav-link > .fa {
-      position: relative;
-      width: 36px;
-      font-size: 24px;
-    }
-
-    .navbar-icon-top .navbar-nav .nav-link > .fa > .badge {
-      font-size: 0.75rem;
-      position: absolute;
-      right: 0;
-      font-family: sans-serif;
-    }
-
-    .navbar-icon-top .navbar-nav .nav-link > .fa {
-      top: 3px;
-      line-height: 12px;
-    }
-
-    .navbar-icon-top .navbar-nav .nav-link > .fa > .badge {
-      top: -10px;
-    }
-
-    .dropdown-toggle::after {
-      display: none;
-    }
-
     body {
       background-color: #f8f9fa;
       font-family: Arial, sans-serif;
@@ -53,7 +27,6 @@
       border-bottom-color: #329685;
       border-top-style: solid;
       border-top-color: #329685;
-
     }
 
     .modal-title {
@@ -62,26 +35,6 @@
 
     .table {
       background-color: #fff;
-    }
-
-    .btn-primary {
-      background-color: #007bff;
-      border-color: #007bff;
-    }
-
-    .btn-primary:hover {
-      background-color: #0069d9;
-      border-color: #0062cc;
-    }
-
-    .btn-success {
-      background-color: #28a745;
-      border-color: #28a745;
-    }
-
-    .btn-success:hover {
-      background-color: #218838;
-      border-color: #1e7e34;
     }
 
     .btn-secondary {
@@ -103,6 +56,7 @@
       background-color: #c82333;
       border-color: #bd2130;
     }
+
     .navbar-icon-top .navbar-nav .nav-link > .fa {
       position: relative;
       width: 36px;
@@ -134,57 +88,51 @@
       text-align: center;
     }
     li:hover {
-      background-color: #329685;
-      border-radius: 5px;
-      color: #f0f0f0;
+      background-color:#329685;
+      border-radius:5px;
+      color:#f0f0f0;
     }
-    form {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
+    form{
+      display:flex;
+      align-items:center;
+      margin-bottom:20px;
+    }
+    #keyword{
+      flex:.605;
+      border:2px solid #ccc;
+      padding:10px;
+      border-radius:5px;
+      font-size:16px;
+      transition:border-color .2s ease-in-out;
+    }
+    #keyword:focus{
+      outline:none;
+      border-color:#329685;
+      box-shadow:0 0 0 3px rgba(0,123,255,.1);
+    }
+    button[type="submit"]{
+      color:#fff;
+      border:none;
+      padding:10px 20px;
+      border-radius:5px;
+      font-size:16px;
+      cursor:pointer;
+      transition:background-color .2s ease-in-out;
+    }
+    form>*{
+      margin-right:10px;
+    }
+    #choice{
+      border :2px solid #ccc ; height :45px ; font-size :14px ; padding :5px ; border-radius :4px ; width :150px ; overflow :hidden ;
+    }
+    #choice:hover{
+      outline:none ; border-color :#329685 ;
+    }
+    #choice:focus{
+      outline:none ; border-color :#329685 ; box-shadow :0 0 0 3px rgba(0,123,255,.1) ;
     }
 
-    #keyword {
-      flex: 0.605;
-      border: 2px solid #ccc;
-      padding: 10px;
-      border-radius: 5px;
-      font-size: 16px;
-      transition: border-color 0.2s ease-in-out;
-    }
 
-    #keyword:focus {
-      outline: none;
-      border-color: #007bff;
-      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-    }
-
-    button[type="submit"] {
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.2s ease-in-out;
-    }
-
-    button[type="submit"]:hover {
-      background-color: #0056b3;
-    }
-
-    form > * {
-      margin-right: 10px;
-    }
-    #choice {
-      height: 45px;
-      font-size: 14px;
-      padding: 5px;
-      border-radius: 4px;
-      width: 150px;
-      overflow: hidden;
-    }
 
   </style>
 </head>
@@ -269,7 +217,7 @@
         <option value="365" th:selected="${days == 365}">Last 365 days</option>
       </select>
 
-      <button type="submit" onclick="preserveSelection()">Find</button>
+      <button class="btn btn-info" type="submit" onclick="preserveSelection()">Find</button>
     </form>
     <table class="table">
       <thead>

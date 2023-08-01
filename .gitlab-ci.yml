@@ -1,0 +1,56 @@
+stages:
+  - build
+  - package
+  - deploy
+
+variables:
+  DOCKER_IMAGE_NAME: ycbm-clone
+  DOCKER_REGISTRY: ycbmclone
+  DOCKER_REGISTRY_USERNAME: ycbmclone
+  DOCKER_REGISTRY_PASSWORD: ycbmclone123
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  SSH_USER: svip
+  SSH_HOST: 192.168.1.116
+  SERVICE_NAME: ine4
+
+cache:
+  paths:
+    - .m2/repository
+
+build:
+  stage: build
+  image: maven:3.8.5-openjdk-17
+  script:
+    - mvn clean package -e
+  artifacts:
+    paths:
+      - target/ycbm-0.0.1-SNAPSHOT.jar
+    expire_in: 7 days
+
+docker:
+  stage: package
+  script:
+    - docker login -u $DOCKER_REGISTRY_USERNAME -p $DOCKER_REGISTRY_PASSWORD
+    - docker build -t $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:1.0 --file Dockerfile .
+    - docker push $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:1.0
+
+deploy:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+#  only:
+#    - develop
+  before_script:
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $SSH_HOST >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+  script:
+    - ssh $SSH_USER@$SSH_HOST
+      "docker login -u $DOCKER_REGISTRY_USERNAME -p $DOCKER_REGISTRY_PASSWORD;
+      docker stop $SERVICE_NAME;
+      docker rm $SERVICE_NAME;
+      docker pull $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:1.0;
+      docker run -d -p 8080:8080 --name $SERVICE_NAME $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:1.0;"

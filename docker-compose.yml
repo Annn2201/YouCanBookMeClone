@@ -1,0 +1,7 @@
+version: '1'
+services:
+  your_spring_boot_app:
+    image: ycbmclone/ycbm-clone
+    container_name: ine4
+    ports:
+      - "8080:8080"

@@ -13,6 +13,7 @@ import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.Events;
 import com.hive.ycbm.dto.EventDto;
 import com.hive.ycbm.dto.UserDto;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -44,9 +45,10 @@ public class GoogleCalendarService {
     private String clientSecret;
     private final String redirectUri = "http://localhost:8080/info/oauth2/google";
 
-    public String createUri() {
+    public String createUri(HttpServletRequest request) {
+        String host = request.getHeader("Referer");
         return "https://accounts.google.com/o/oauth2/v2/auth" +
-                "?redirect_uri=" + URLEncoder.encode(redirectUri, StandardCharsets.UTF_8) +
+                "?redirect_uri=" + URLEncoder.encode(host.substring(0, host.length() - 6) + redirectUri, StandardCharsets.UTF_8) +
                 "&prompt=consent" +
                 "&response_type=code" +
                 "&client_id=" + clientId +

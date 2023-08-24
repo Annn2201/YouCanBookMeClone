@@ -47,3 +47,9 @@ spring:
 #     org.springframework.security: DEBUG
 #   file:
 #     name: application.log
+springdoc:
+  swagger-ui:
+    defaultModelsExpandDepth: -1
+  api-docs:
+    path: /api-doc
+

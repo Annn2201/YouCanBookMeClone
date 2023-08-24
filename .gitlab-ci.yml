@@ -54,3 +54,4 @@ deploy:
       docker rm $SERVICE_NAME;
       docker pull $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:1.0;
       docker run -d -p 8080:8080 --name $SERVICE_NAME $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:1.0;"
+#    - echo "demo123"

@@ -30,8 +30,8 @@ public class InfoController {
     }
 
     @GetMapping("/oauth2")
-    public String connectGoogle() {
-        String authorizationUrl = googleCalendarService.createUri();
+    public String connectGoogle(HttpServletRequest request) {
+        String authorizationUrl = googleCalendarService.createUri(request);
         return "redirect:" + authorizationUrl;
     }
 
